@@ -1,0 +1,400 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/paper-badge/paper-badge.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+
+<link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+
+
+
+<dom-module id="my-app-item">
+
+  <template>
+		
+		<!---- >
+		<link rel="import" type="css" href="../styles/iron-list-collapse.css">
+		<!---->
+		
+    <style>
+			
+      :host {
+        display: block;
+			}
+			
+			table {
+				height: 100%;
+				width: 100%;
+				border-collapse: collapse;
+				text-align: center;
+				word-wrap: break-all;
+				xword-break: break-all;
+				color: var(--paper-grey-600);
+			}
+			
+			td {
+				vertical-align: top;
+			}
+			td.display {
+				text-align: left;
+				padding: 0;
+				/** /
+				padding: 0 0 0 0.5em;
+				/**/
+			}
+			td.icon-row {
+				padding: 0;
+				height: 1px;
+			}
+			td.bottom {
+				vertical-align: bottom;
+			}
+			
+			h1, h2, h3, h4 {
+				color: black;
+			}
+			
+			.larger {
+				font-size: 1.5em; /*larger;*/
+			}
+			.smaller {
+				font-size: smaller;
+			}
+			.thin {
+				width: 2em;
+			}
+			.one-line {
+				/** / 
+				http://stackoverflow.com/questions/3922739/limit-text-length-to-n-lines-using-css
+				http://stackoverflow.com/a/13924997/1640892
+				http://stackoverflow.com/a/15175769/1640892
+				/**/
+				overflow: hidden;
+				text-overflow: ellipsis;
+				word-wrap: break-word;
+				line-height: 1.1em;
+				max-height: 1.1em; /* Set max-height = line-height x number of lines to show */
+				display: -webkit-box;
+				-webkit-line-clamp: 1; /* number of lines to show */
+				-webkit-box-orient: vertical;				
+			}
+			
+			.two-lines {
+				/** / 
+				http://stackoverflow.com/questions/3922739/limit-text-length-to-n-lines-using-css
+				http://stackoverflow.com/a/13924997/1640892
+				http://stackoverflow.com/a/15175769/1640892
+				/**/
+				overflow: hidden;
+				text-overflow: ellipsis;
+				word-wrap: break-word;
+				line-height: 1.1em;
+				max-height: 2.2em; /* Set max-height = line-height x number of lines to show */
+				display: -webkit-box;
+				-webkit-line-clamp: 2; /* number of lines to show */
+				-webkit-box-orient: vertical;				
+			}
+			
+			.two-columns {
+        @apply(--layout-flex);
+        @apply(--layout-horizontal);
+        overflow: hidden;
+      }
+			
+			iron-icon, paper-icon-button {
+				/** /
+				color: var(--paper-grey-500);
+				--iron-icon-width: 22px;	/* 24px * /
+				--iron-icon-height: 22px;	/* 24px * /
+				--iron-icon-fill-color: var(--paper-grey-200);
+				--iron-icon-stroke-color: var(--paper-grey-200);
+				/**/
+			}
+			paper-tooltip {
+				--paper-tooltip-text-color: var(--paper-yellow-500);
+				font-weight: bold;
+			}
+			
+			iron-image {
+				height: 202px;
+				width: 134px;
+				background-color: lightgray;
+			}
+			
+			paper-card.item {
+				@apply(--layout-vertical);
+				/** /
+				@apply(--center-justified);
+				max-width: 400px;
+				margin-left: auto;
+				margin-right: auto;
+				/**/
+			}			
+			.item {
+        border-radius: 8px;
+        @apply(--layout-horizontal);
+        background-color: white;
+        border: 1px solid #ddd;
+        xpadding: 1px;
+        margin: 5px 0 5px 1px;
+        cursor: pointer;
+				overflow: hidden;
+				/* Apply transitions to parent */
+				transition         : 2.5s;
+				-o-transition      : 2.5s;
+				-ms-transition     : 2.5s;
+				-moz-transition    : 2.5s;
+				-webkit-transition : 2.5s;
+				/**/
+      }
+			.item:hover {
+				background-color: var(--paper-grey-100, --google-grey-100);
+        border: 1px solid var(--paper-grey-400, #BDBDBD);
+			}
+      .item:first-of-type {
+        margin-top: 0;
+      }
+			.item img {
+				max-height: 202px;
+			}
+			.star {
+				color: var(--accent-color, --paper-blue-600);
+			}
+			p.bottom-icon {
+				/** /
+				@apply(--center-justified);
+				/**/
+				text-align: center;
+				margin: 0;
+				padding: 0;
+			}
+			
+			div.card-content {
+				padding: 0;
+				xheight: 202px;
+			}
+			div.card-actions {
+				/** /
+				visibility: visible;
+				/**/
+				color: var(--paper-grey-500, #9E9E9E, grey);
+				padding: 0 15px;
+				font-size: smaller;
+				text-align: justify;
+				word-wrap: break-all;
+				text-justify: newspaper;
+				/** /
+				transition         : 2.5s;
+				-o-transition      : 2.5s;
+				-ms-transition     : 2.5s;
+				-moz-transition    : 2.5s;
+				-webkit-transition : 2.5s;
+				/**/
+			}
+			
+			paper-progress {
+				display: block;
+				width: 100%;
+				margin: 0;
+				--paper-progress-active-color: var(--accent-color);
+			}
+			
+			.scores {
+				font-size: smaller;
+				color: var(--paper-grey-500, #9E9E9E, grey);
+			}
+			.highlight {
+				font-size: larger;
+				font-weight: bold;
+				color: white;
+				padding: 0.5em;
+			}
+			.circ {
+				border-radius: 1em; /* 50% */
+				-moz-border-radius: 1em; /* 50% */
+			}
+			.rect {
+				border-radius: 0.5em;
+				-moz-border-radius: 0.5em;
+			}
+			.success {
+				background-color: var(--paper-green-500, #4CAF50);
+			}
+			.warning {
+				background-color: var(--paper-orange-500, #FF9800);
+			}
+			.danger {
+				background-color: var(--paper-red-500, #F44336);
+			}
+			.none {
+				display: none;
+			}
+			
+    </style>
+		
+		<paper-card class="item">
+			<div class="card-content">
+				<table xborder="1">
+					<tbody>
+						<tr>
+							<td colspan="2">
+								<paper-progress value="70"
+																xvalue="[[item.score]]"
+																xclass$="[[item.qCode]]"
+																xclass="blue">
+								</paper-progress>
+								<paper-tooltip>Total score <span class="larger">[[item.score]]</span>%</paper-tooltip>
+							</td>
+						</tr>
+						<tr>
+							<td rowspan="2" class="icon-row bottom thin">
+								<span hidden$="[[expanded]]">
+									<paper-icon-button on-tap="_toggleSize"
+																		 xicon="visibility"
+																		 icon="chevron-right"
+																		 xicon="expand-more"
+																		 xicon="info-outline">
+									</paper-icon-button>
+									<paper-tooltip position="left">[[item.address]]</paper-tooltip>
+									<!---- >
+									<paper-tooltip position="left">Learn more</paper-tooltip>
+									<!---->
+								</span>
+								<span hidden$="[[!expanded]]">
+									<paper-icon-button on-tap="_toggleSize"
+																		 icon="expand-more"
+																		 xicon="expand-less">
+									</paper-icon-button>
+									<paper-tooltip position="left">Show less</paper-tooltip>
+								</span>
+								<!---- >
+								<span hidden$="[[selected]]">
+									<paper-icon-button icon="star-border"></paper-icon-button>
+									<paper-tooltip position="top">List showtimes</paper-tooltip>
+								</span>
+								<span hidden$="[[!selected]]">
+									<paper-icon-button icon="star" class="star"></paper-icon-button>
+									<paper-tooltip position="top">Remove showtimes</paper-tooltip>
+								</span>
+								<!---->
+							</td>
+							<td class="display one-line">
+								<!---- >
+								<span>[[item.address]]</span><br />
+								<!---->
+								<strong>[[street]]</strong>
+								<!---->
+								<paper-tooltip position="bottom">[[item.address]]</paper-tooltip>
+							</td>
+						</tr>
+						<tr>
+							<td class="display one-line">
+								<span>[[csz]]</span>
+								<paper-tooltip position="bottom">[[item.address]]</paper-tooltip>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="card-actions"
+					 hidden$="[[!expanded]]"
+					 xon-tap="_toggleSize">
+				<my-app-item-content></my-app-item-content>
+				<p class="bottom-icon">
+					<paper-icon-button icon="expand-less"
+														 id="expandless"
+														 on-tap="_toggleSize">
+					</paper-icon-button>
+					<paper-tooltip position="top" for="expandless">Close</paper-tooltip>
+				</p>
+			</div>
+		</paper-card>
+		
+  </template>
+	
+  <script>
+		(function(){
+			Polymer({
+				is: 'my-app-item',
+				/**/
+				observers: [
+					'_addressChanged(item.address)'	
+				],
+				/**/
+				properties: {
+					/**/
+					/**/
+					expanded: {
+						type: Boolean,
+						value: function() {
+							return false;
+						}
+					},
+					/** /
+					selected: {
+						type: Boolean,
+						value: function() {
+							return false;
+						}
+					}
+					/** /
+					item: {
+						type: Object,
+						notify: true
+					},
+					qCode: {
+						type: String,
+						computed: '_computeQcode(item)',
+						notify: true
+					}
+					/**/
+				},
+				/**/
+				_addressChanged: function(s) {
+					var ar = s.split(', ');
+					this.set('street', ar.shift());
+					this.set('csz'   , ar.join(', '));
+				},
+				/** /
+				_computeProgressClass: function(str) {
+					return str;
+				},
+				/**/
+				_clearBid: function() {
+					this.set('mybid', '');
+				},
+				/**/
+				_toggleSelection: function() {
+					this.set('selected', !this.selected);
+					//this.fire('item-toggle-select');
+				},
+				_toggleSize: function() {
+					//console.log(this.item);
+					this.set('expanded', !this.expanded);
+					this.fire('item-act', { action: 'size' });
+				},
+				_itemDelete: function() {
+					//this.set('selected', !this.selected);
+					this._toggleSelection();
+					this.playAnimation('exit');
+					//this.fire('item-act', { action: 'delete' });
+				}
+			});
+		})();
+  </script>
+</dom-module>
+

@@ -1,0 +1,208 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/hero-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animatable.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
+<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
+
+<link rel="import" href="custom/custom-logo.html">
+<link rel="import" href="custom/login-fab.html">
+<link rel="import" href="view-landing-header.html">
+<link rel="import" href="view-landing-login.html">
+<link rel="import" href="view-landing-summary.html">
+<link rel="import" href="view-landing-slides.html">
+<link rel="import" href="view-landing-slides-1.html">
+<link rel="import" href="view-landing-slides-2.html">
+
+<link rel="import" href="../styles/app-theme.html">
+
+
+<!---- >
+https://github.com/vaadin/expense-manager-demo/blob/master/client/app/elements/login-page.html
+<!---->
+
+<dom-module id="view-landing">
+	
+	<style xis="custom-style" include="app-theme shared-styles iron-flex iron-flex-alignment"></style>
+	<style>
+		:host {
+			/** /
+			display: block;
+			/**/
+			scroll-behavior: smooth;
+		}
+		/**/
+		
+		paper-progress {
+			display: block;
+			--paper-progress-active-color: var(--paper-blue-500);
+			/** /
+			--paper-progress-active-color: var(--accent-color);
+			/**/
+		}
+		.progress {
+			height: 100vh;
+		}
+    .header {
+			min-height: 100vh;
+      @apply(--layout-vertical);
+    }
+    .flexchild {
+      @apply(--layout-flex);
+			@apply(--layout-vertical);
+      @apply(--layout-center-justified);
+    }
+		.flex-center-justified {
+			@apply(--layout-horizontal);
+			@apply(--layout-center-justified);
+		}
+		.flex-center-align {
+			@apply(--layout-horizontal);
+			@apply(--layout-center);
+			height: 100vh;
+		}
+	</style>
+
+  <template>
+		
+		<!---- >
+		<login-fab></login-fab>
+		<neon-animated-pages id="pages"
+												 selected="[[_selected]]"
+												 entry-animation="[[entryAnimation]]"
+												 exit-animation="[[exitAnimation]]">
+			
+			<neon-animatable>
+				<div class="container">
+					<view-landing-header header-title="Loan Zone"
+															 header-tag="Less hassle. More deals.">
+					</view-landing-header>
+					<view-landing-login class="flexchild"
+															app="{{app}}">
+					</view-landing-login>
+					<div class="flex-center-justified">
+						<paper-icon-button icon="expand-more"
+															 on-click="_onNavDown">
+						</paper-icon-button>
+					</div>
+				</div>
+			</neon-animatable>
+						
+			<neon-animatable>
+				<view-landing-summary id="summary"></view-landing-summary>
+			</neon-animatable>
+			
+			<neon-animatable>
+				<view-landing-slides></view-landing-slides>
+			</neon-animatable>
+			
+			<neon-animatable>
+				<view-footer notice-year="2016"
+										 notice-owner="Codebase Laboratories">
+				</view-footer>
+			</neon-animatable>
+			
+		</neon-animated-pages>
+		<!---- >
+		<!---->
+		<div class="progress flex layout vertical flex-center-justified flex-center-align"
+				 hidden$="[[_hideProgress]]">
+			<p>Loading</p>
+			<paper-progress indeterminate></paper-progress>
+		</div>
+		<div hidden$="[[app.auth]]" class="fade-in">
+			<div class="header">
+				<view-landing-header id="top"
+														 header-title="Loan Zone"
+														 header-tag="Less hassle. More deals.">
+				</view-landing-header>
+				<view-landing-login class="flexchild"
+														app="{{app}}">
+				</view-landing-login>
+			</div>
+			<view-landing-summary id="summary"></view-landing-summary>
+			<div class="container flex-center-justified">
+				<a href="#top">
+					<paper-icon-button icon="expand-less"></paper-icon-button>
+				</a>
+			</div>
+			<view-landing-slides id="slides"></view-landing-slides>
+			<view-footer notice-year="2016"
+									 notice-owner="Codebase Laboratories">
+			</view-footer>
+		</div>
+				
+		
+  </template>
+
+  <script>
+    (function() {
+      //'use strict';
+      Polymer({
+        is: 'view-landing',
+				properties: {
+					app: {
+						type: Object,
+						notify: true,
+						reflectToAttribute: true,
+					},
+					/**/
+					_hideProgress: {
+						type: Boolean,
+						computed: '_computeHideProgress(app)',
+					},
+				},
+				listeners: {
+					'login-buttons-horizontal' : '_onLogin'        ,
+					/** /
+					'login-button-menu'        : '_onLoginButton'  ,
+					'login-buttons-horizontal' : '_onLoginButton'  ,
+					'login-buttons-vertical'   : '_onLoginButton'  ,
+					'login-fab'                : '_onLoginButton'  ,
+					'logout-button'            : '_onLogoutButton' ,
+					'logout'                   : '_onLogout'       ,
+					/** /
+					'nav-up'                   : '_onNavUp'        ,
+					'nav-down'                 : '_onNavDown'      ,
+					/**/
+				},
+				_computeHideProgress: function() {
+					return !( (this.app && this.app.auth) && (typeof this.app.auth === 'Boolean') );
+				},
+				_onLogin: function() {
+					this.set('app.auth', true);
+				},
+				/** /
+				_onLogout: function() {
+					this.set('isLogin', false);
+				},
+				_onNavUp: function() {
+					this.set('entryAnimation' , 'slide-from-top-animation');
+					this.set('exitAnimation'  , 'slide-down-animation'    );
+					this.set('_selected'      ,  this._selected - 1       );
+				},
+				_onNavDown: function() {
+					this.set('entryAnimation' , 'slide-from-bottom-animation');
+					this.set('exitAnimation'  , 'slide-up-animation'         );
+					this.set('_selected'      ,  this._selected + 1          );
+				},
+				_show: function() {
+					//this.set('app.auth', true);
+					console.log('app', this.app);
+				},
+				/**/
+	    });
+    })();
+  </script>
+</dom-module>

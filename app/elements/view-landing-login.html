@@ -1,0 +1,74 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+<link rel="import" href="custom/login-buttons-horizontal.html">
+<link rel="import" href="custom/login-buttons-vertical.html">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+<dom-module id="view-landing-login">
+	
+	<style is="custom-style" include="iron-flex iron-flex-alignment"></style>
+	<style>
+		/**/    
+		:host {
+    }
+		.container {
+      margin: 1em auto;
+		}
+    paper-icon-item {
+			transition         : 1s;
+			-o-transition      : 1s;
+			-ms-transition     : 1s;
+			-moz-transition    : 1s;
+			-webkit-transition : 1s;	
+		}
+		paper-icon-item:hover
+		{
+			box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.3);
+			cursor: pointer;
+			border-radius: 5px;
+			background-color: var(--primary-color);
+			color: white;
+			transition         : 1s;
+			-o-transition      : 1s;
+			-ms-transition     : 1s;
+			-moz-transition    : 1s;
+			-webkit-transition : 1s;
+		}
+		div[role="listbox"] {
+			width: 18em;
+		}
+		/**/    
+	</style>
+	<style is="custom-style">
+		.flex-center-justified {
+			@apply(--layout-horizontal);
+			@apply(--layout-center-justified);
+		}
+	</style>
+	
+	<template>
+		
+		<login-buttons-horizontal></login-buttons-horizontal>
+		<!---- >
+		<login-buttons-vertical></login-buttons-vertical>
+		<a href="#summary">Link</a>
+		<!---->
+
+  </template>
+
+  <script>
+    (function() {
+      //'use strict';
+      Polymer({
+        is: 'view-landing-login',
+      });
+    })();
+  </script>
+</dom-module>

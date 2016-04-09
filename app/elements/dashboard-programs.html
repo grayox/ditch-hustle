@@ -1,0 +1,186 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/geo-location/geo-location.html">
+
+<link rel="import" href="../../bower_components/app-layout/app-layout.html">
+
+<link rel="import" href="../../bower_components/firebase-element/firebase-collection.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/iron-form-element-behavior/iron-form-element-behavior.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-validatable-behavior/iron-validatable-behavior.html">
+
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+
+<link rel="import" href="app-programs-item.html">
+
+<link rel="import" href="custom/paper-chip/paper-chip.html">
+
+<link rel="import" href="../styles/shared-styles.html">
+
+<dom-module id="dashboard-programs">
+	
+  <template>
+	
+    <style include="shared-styles"></style>
+		<style>
+			:host {
+			}
+		</style>
+
+		<paper-dialog id="modal" modal
+									entry-animation="scale-up-animation"
+									exit-animation="fade-out-animation">
+      <p>
+				Are you sure you want to <strong>delete</strong>
+				the item named <strong>[[tempModalName]]</strong>?
+			</p>
+      <div class="buttons">
+        <paper-button dialog-dismiss on-tap="_closeModal">Cancel and keep item</paper-button>
+        <paper-button dialog-confirm on-tap="_deleteItem"
+											autofocus raised class="main"      >Delete [[tempModalName]]</paper-button>
+      </div>
+    </paper-dialog>
+		
+		<paper-card heading="Programs"
+								elevation="[[elevation]]"
+								on-tap="_toggleCollapse"
+								on-mouseover="_handleMouseover"
+							 	on-mouseout="_handleMouseout"
+								animatedShadow>
+			<iron-collapse id="collapse">
+				<div class="card-content">
+					<template is="dom-repeat" items="{{items}}" xas="item">
+						<paper-chip active animated removable on-edit="_editItem">
+							<div class="icon">[[item.name.0]]</div>
+							<h1>[[item.name]]</h1>
+							<h2>[[item.summary]]</h2>
+						</paper-chip>
+					</template>
+				</div>
+				<div class="card-actions">
+					<paper-icon-button icon="settings"></paper-icon-button>
+					<paper-icon-button icon="add"></paper-icon-button>
+				</div>
+			</iron-collapse>
+		</paper-card>
+
+  </template>
+
+	<script>
+		(function(){
+			//'use strict';
+			Polymer({
+				is: 'dashboard-programs',
+				properties: {
+					app: {
+						type: Object,
+						notify: true,
+						reflectToAttribute: true,
+					},
+					elevation: {
+						type: Number,
+						notify: true,
+						reflectToAttribute: true,
+						value: 1,
+					},
+					items: {
+						type: Array,
+						notify: true,
+						reflectToAttribute: true,
+						value: function() {
+							return [];
+						},
+					},
+				},
+				// Listen for ENTER key
+				_checkEnter: function(e) {
+					if (e.keyCode === 13) {
+						/** /
+						console.log(e);
+						this._formSubmit();
+						/**/
+						this.addItem();
+					}
+				},
+				
+				_handleMouseover: function() {
+					this.set('elevation', this.elevation + 2);
+				},
+				_handleMouseout: function() {
+					this.set('elevation', this.elevation - 2);
+				},
+				
+				/** /
+				observers: [
+ 					'_itemsAddedOrRemoved(items.splices)', // Array mutations, splices — Reference: https://www.polymer-project.org/1.0/docs/devguide/properties.html#array-observation
+				],
+				_itemsAddedOrRemoved: function(info) {
+					console.log(info);
+				},
+				/**/
+				_handleDelete: function(e) {
+					var index = e.model.index,
+							name = this.items[index]['name'];
+					this.set('tempModalIndex', index );
+					this.set('tempModalName' , name  );
+					this.$.modal.open();
+				},
+				_closeModal: function() {
+					this.set('tempModalIndex', null);
+					this.set('tempModalName' , null);
+					this.$.modal.close();
+				},
+				_editItem: function(e) {
+					console.log('edit', e);
+				},
+				_deleteItem: function() {
+					/** /
+					//console.log('delete', e.model.index);
+					var index = e.model.index;
+					/**/
+					var index = this.tempModalIndex;
+					this.splice('items', index, 1);
+					this.set('tempModalIndex', null);
+					this.set('tempModalName' , null);
+					this.fire('toggle-changed');
+					/**/
+				},
+				_toggleCollapse: function(e) {
+					if (e.target.classList.contains('title-text', 'style-scope', 'paper-card')) {
+						this.$.collapse.toggle();
+					}
+				},
+				toggleCollapse: function() {
+					this.$.collapse.toggle();
+				},
+				showCollapse: function() {
+					this.$.collapse.show();
+				},
+				hideCollapse: function() {
+					this.$.collapse.hide();
+				},
+				
+			});
+		})();
+	</script>
+	
+</dom-module>

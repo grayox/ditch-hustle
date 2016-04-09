@@ -1,0 +1,204 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/firebase-element/firebase-document.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/iron-form-element-behavior/iron-form-element-behavior.html">
+<link rel="import" href="../../bower_components/iron-validatable-behavior/iron-validatable-behavior.html">
+<link rel="import" href="../../bower_components/paper-badge/paper-badge.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<!--<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">-->
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+
+<link rel="import" href="app-programs.html">
+<link rel="import" href="custom/us-map-select.html">
+
+<dom-module id="my-data-programs">
+	
+  <template>
+	
+		<style>
+			/*
+			paper-toggle-button {
+        display: block;
+        margin-bottom: 40px;
+        --paper-toggle-button-checked-ink-color:       var(--accent-color)         ;
+        --paper-toggle-button-checked-bar-color:       var(--accent-color)         ;
+        --paper-toggle-button-checked-button-color:    var(--accent-color)         ;
+        --paper-toggle-button-unchecked-ink-color:     var(--accent-color)         ;
+        --xpaper-toggle-button-unchecked-bar-color:    var(--paper-light-blue-900) ;
+        --xpaper-toggle-button-unchecked-button-color: var(--paper-light-blue-900) ;
+      }
+			paper-toggle-button:last-of-type {
+        margin-bottom: 0;
+      }
+			*/
+			paper-fab {
+				position: fixed;
+				top: 128px;
+				right: 32px;
+				/** /
+				bottom: 16px;
+				background: yellow;
+				-webkit-transform: translateZ(0);      
+				/**/
+			}
+			paper-checkbox {
+        display: block;
+				margin-bottom: 40px;
+        --paper-checkbox-checked-color:      var(--accent-color);
+        --xpaper-checkbox-checked-ink-color: var(--accent-color);
+			}
+			paper-checkbox:last-of-type {
+        margin-bottom: 10px;
+      }
+			paper-card {
+				width: 100%;
+				max-width: 400px;
+				margin-bottom: 16px;
+				@apply(--layout-vertical);
+				@apply(--center-justified);
+				margin-left: auto;
+				margin-right: auto;
+			}
+			.larger {
+				font-size: larger;
+			}
+		</style>
+		
+		<style xis="custom-style">
+			paper-button.custom {
+				background-color: var(--primary-color);
+				color: white;
+			}
+			paper-button.custom:hover {
+				background-color: var(--light-primary-color);
+			}
+		</style>
+		
+		<style>
+			paper-toolbar {
+			/** /
+				--paper-toolbar-background: red;
+				--paper-toolbar-title: {
+					font-style: italic;
+					font-weight: bold;
+				};
+			/**/
+				--paper-toolbar: {
+					margin-bottom: 2em;
+				}
+			}
+		</style>
+		
+		<!---- >
+		<firebase-document id="fbd"
+											 location="[[app.fb.settings]]"
+											 xdata="{{app.settings}"
+											 data="{{settings}}"
+											 xon-firebase-value="_firebaseLoaded">
+		</firebase-document>
+		<!---->
+
+		<!---- >
+		<paper-toolbar>
+			<div style="display:inline-block" class="title">
+				<span>Loan Programs</span>
+				<paper-badge hidden$="[[!activeCount]]"
+										 label="[[activeCount]]"></paper-badge>
+			</div>
+		</paper-toolbar>
+		<!---->
+		
+		<div class="xfit layout vertical">
+			
+			<h1>Programs</h1>
+			<!---- >
+			<paper-card heading="Loan Programs">
+				<div class="card-content layout vertical" hidden xhidden$="[[app.meta.signedIn]]">
+					<p>Please login to edit, save and view your loan programs.</p>
+				</div>
+			</paper-card>
+			<paper-fab icon="add" on-tap='addProgram'></paper-fab>
+			<!---->
+			
+			<app-programs xon-tap="_show" app="{{app}}" items="{{items}}"></app-programs>
+		</div>
+  </template>
+
+	<script>
+		(function(){
+			//'use strict';
+			Polymer({
+				is: 'my-data-programs',
+				properties: {
+					app: {
+						type: Object,
+						notify: true,
+						reflectToAttribute: true,
+					},
+					items: {
+						type: Array,
+						notify: true,
+						reflectToAttribute: true,
+					},
+					activeCount: {
+						type: Number,
+						//computed: '_computeActiveCount(items.length)',
+					},
+				},
+				listeners: {
+					'toggle-changed' : '_computeActiveCount',
+				},
+				attached: function() {
+					this.async(function() {
+						this._computeActiveCount();
+					}, 0);
+				},
+				_computeActiveCount: function(info) {
+					var out = 0,
+							a = this.items,
+							i = a.length;
+					while(i--) {
+						if(a[i].active){out++;}
+					}
+					this.set('activeCount', out);
+					//return out;
+				},
+				/** /
+				printSettings: function() {
+					console.log(this.settings);
+				},
+				_firebaseLoaded: function() {
+					console.log('Firebase Loaded Now');
+					console.log(this.$.fbd);
+					console.log(this.app);
+				},
+				_settingsChanged: function() {
+					this.set('app.settings', this.settings);
+				},
+				/** /
+				_show: function() {
+					console.log(this.activeCount);
+				},
+				/**/
+
+			});
+		})();
+	</script>
+	
+</dom-module>

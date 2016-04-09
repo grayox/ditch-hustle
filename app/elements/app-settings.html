@@ -1,0 +1,155 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/firebase-element/firebase-document.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/iron-form-element-behavior/iron-form-element-behavior.html">
+<link rel="import" href="../../bower_components/iron-validatable-behavior/iron-validatable-behavior.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<!--<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">-->
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+
+<link rel="import" href="app-programs.html">
+<link rel="import" href="custom/us-map-select.html">
+
+<dom-module id="app-settings">
+	
+  <template>
+	
+		<style include="shared-styles"></style>
+		<style>
+			/*
+			paper-toggle-button {
+        display: block;
+        margin-bottom: 40px;
+        --paper-toggle-button-checked-ink-color:       var(--accent-color)         ;
+        --paper-toggle-button-checked-bar-color:       var(--accent-color)         ;
+        --paper-toggle-button-checked-button-color:    var(--accent-color)         ;
+        --paper-toggle-button-unchecked-ink-color:     var(--accent-color)         ;
+        --xpaper-toggle-button-unchecked-bar-color:    var(--paper-light-blue-900) ;
+        --xpaper-toggle-button-unchecked-button-color: var(--paper-light-blue-900) ;
+      }
+			paper-toggle-button:last-of-type {
+        margin-bottom: 0;
+      }
+			*/
+			paper-checkbox {
+        display: block;
+				margin-bottom: 40px;
+        --paper-checkbox-checked-color:      var(--accent-color);
+        --xpaper-checkbox-checked-ink-color: var(--accent-color);
+			}
+			paper-checkbox:last-of-type {
+        margin-bottom: 10px;
+      }
+			paper-card {
+				width: 100%;
+				max-width: 400px;
+				margin-bottom: 16px;
+				@apply(--layout-vertical);
+				@apply(--center-justified);
+				margin-left: auto;
+				margin-right: auto;
+			}
+			.larger {
+				font-size: larger;
+			}
+		</style>
+		
+		<style xis="custom-style">
+			paper-button.custom {
+				background-color: var(--primary-color);
+				color: white;
+			}
+			paper-button.custom:hover {
+				background-color: var(--light-primary-color);
+			}
+		</style>
+		
+		<!---->
+		<firebase-document
+		  xlocation="https://radiant-heat-5197.firebaseio.com/settings"
+		  location="[[app.fb.settings]]"
+		  data="{{settings}}"
+			on-firebase-value="_firebaseLoaded"
+			xlog></firebase-document>
+		
+		<div class="xfit layout vertical">
+			<h1 on-tap="_show">Settings</h1>
+			<paper-card heading="User Information">
+				<div class="card-content layout vertical">
+					<paper-input label="Name"    value="{{settings.name}}"    ></paper-input>
+					<paper-input label="Email"   value="{{settings.email}}"   ></paper-input>
+				</div>
+			</paper-card>
+			<paper-card heading="Company Information">
+				<div class="card-content layout vertical">
+					<paper-input label="Company" value="{{settings.company}}" ></paper-input>
+					<paper-input label="Website" value="{{settings.website}}" ></paper-input>
+					<paper-input label="Contact" value="{{settings.contact}}" ></paper-input>
+					<paper-input label="Phone"   value="{{settings.phone}}"   ></paper-input>
+					<paper-input label="Address" value="{{settings.address}}" ></paper-input>
+					<paper-input label="Amount"  value="{{settings.amount}}"  ></paper-input>
+				</div>
+			</paper-card>
+		</div>
+  </template>
+
+	<script>
+		(function(){
+			//'use strict';
+			Polymer({
+				is: 'app-settings',
+				properties: {
+					app: {
+						type: Object,
+						notify: true,
+						reflectToAttribute: true,
+					},
+					settings: {
+						type: Object,
+						notify: true,
+						//value: {},
+					},
+				},
+				/** /
+				attached: function() { // Ensure first paint // Reference: http://stackoverflow.com/a/35397590/1640892
+					if (this.selected === undefined) {
+						this.async(function() {
+							this.selected = [];
+						}, 0);
+					}
+				},
+				/**/
+				_firebaseLoaded: function() {
+					/**/
+					if(!this.settings) {
+						this.set('settings', {});
+					}
+					this.set('app.settings', this.settings);
+					/**/
+				},
+				/**/
+				_show: function() {
+					/**/
+					console.log('app'       , this.app       );
+					console.log('settings'  , this.settings  );
+					/**/
+				},
+			});
+		})();
+	</script>
+	
+</dom-module>

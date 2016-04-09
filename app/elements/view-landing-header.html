@@ -1,0 +1,159 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/hero-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/fade-out-animation.html">
+
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
+
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+<link rel="import" href="custom/custom-logo.html">
+<link rel="import" href="view-landing-login.html">
+
+<dom-module id="view-landing-header">
+	
+	<style is="custom-style" include="iron-flex iron-flex-alignment"></style>
+  <style>
+		/**/
+    :host {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .header {
+      background: var(--primary-color);
+      min-height: 50vh;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      align-items: center;
+      justify-content: flex-end;
+			/** /
+			background-image: url('../images/landing/skyscraper.jpg');
+			/**/
+    }
+    
+    .header .logo {
+      color: var(--primary-color);
+      --iron-icon-height: 96px;
+      --iron-icon-width: 96px;
+    }
+    
+    .header h1 {
+      color: var(--text-primary-color);
+			font-family: Impact, Charcoal, sans-serif;
+      font-size: 60px;
+      font-weight: 100;
+      margin-top: 0;
+    }
+    
+    @media (max-width: 600px) {
+      .login,
+      .header {
+        height: 50vh;
+      }
+      .fork-me {
+        width: 100px;
+      }
+    }
+    
+    @media (max-width: 500px) {
+      .header h1 {
+        font-size: 40px;
+      }
+    }
+		/**/
+  </style>
+	
+	
+	<style is="custom-style">
+		.flex-center-justified {
+			@apply(--layout-horizontal);
+			@apply(--layout-center-justified);
+		}
+	</style>
+	<style>
+		p {
+			/** /
+			font-style: italic;
+			/**/
+			color: white;
+			opacity: .5;
+		}
+	</style>
+
+	<template>
+		
+		<div id="header" class="header">
+			<p>[[headerTag]]</p>
+			<custom-logo></custom-logo>
+			<h1>[[headerTitle]]</h1>
+		</div>
+						
+  </template>
+
+  <script>
+    (function() {
+      //'use strict';
+      Polymer({
+        is: 'view-landing-header',
+        properties: {
+					headerTitle: {
+						type: String,
+						notify: true,
+						reflectToAttribute: true,
+					},
+					headerTag: {
+						type: String,
+						notify: true,
+						reflectToAttribute: true,
+					},
+					animationConfig: {
+            value: function() {
+              return {
+                'entry': {
+                  name: 'fade-in-animation',
+                  node: this,
+                  timing: {
+                    duration: 5000,
+                  },
+                },
+                'exit': [{
+                  name: 'hero-animation',
+                  id: 'hero',
+                  fromPage: this,
+                  timing: {
+                    easing: 'ease-in',
+                  },
+                }, {
+                  name: 'fade-out-animation',
+                  node: this,
+                }]
+              };
+            }
+          },
+          sharedElements: {
+            value: function() {
+              return {
+                'hero': this.$.logo
+              };
+            }
+          }
+        },
+        behaviors: [Polymer.NeonSharedElementAnimatableBehavior],
+        _logIn: function() {
+          var _this = this;
+          this.service.login(this.username, this.password)
+            .catch(function(error) {
+              _this.errorMessage = error;
+            });
+        }
+      });
+    })();
+  </script>
+</dom-module>

@@ -1,0 +1,356 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/geo-location/geo-location.html">
+
+<link rel="import" href="../../bower_components/app-layout/app-layout.html">
+
+<link rel="import" href="../../bower_components/firebase-element/firebase-collection.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/iron-form-element-behavior/iron-form-element-behavior.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-validatable-behavior/iron-validatable-behavior.html">
+
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+
+<link rel="import" href="app-programs-item.html">
+
+<link rel="import" href="custom/paper-chip/paper-chip.html">
+
+<link rel="import" href="../styles/shared-styles.html">
+
+<dom-module id="app-programs">
+	
+  <template>
+	
+		<style include="shared-styles"></style>
+		<style>
+			:host {
+			}
+			paper-fab {
+				position: fixed;
+				top: 128px;
+				right: 32px;
+				/** /
+				bottom: 16px;
+				background: yellow;
+				-webkit-transform: translateZ(0);      
+				/**/
+			}
+			/** /
+			paper-material {
+				background-color: white;
+				width: 100%;
+				max-width: 400px;
+				@apply(--layout-vertical);
+				@apply(--center-justified);
+				margin: 16px auto;
+				padding: 8px 32px;
+				border-radius: 4px;
+			}
+			/**/
+			.item {
+				/**/
+        border-radius: 8px;
+        background-color: white;
+        border: 1px solid #ddd;
+        padding: 0.5em 1em;
+        margin: .25em auto;
+				overflow: visible;
+				/* Apply transitions to parent * /
+				transition         : 2.5s;
+				-o-transition      : 2.5s;
+				-ms-transition     : 2.5s;
+				-moz-transition    : 2.5s;
+				-webkit-transition : 2.5s;
+				/**/
+				width: 100%;
+				max-width: 400px;
+				@apply(--layout-vertical);
+				@apply(--center-justified);
+				/** /
+        cursor: pointer;
+				/**/
+		  }
+			/**/
+
+
+		</style>
+		
+		<style xis="custom-style">
+			paper-button.custom {
+				--paper-button-ink-color: var(--paper-pink-a200);
+				/* These could also be individually defined for each of the
+					specific css classes, but we'll just do it once as an example */
+				--paper-button-flat-keyboard-focus: {
+					background-color: var(--paper-pink-a200);
+					color: white !important;
+				};
+				--paper-button-raised-keyboard-focus: {
+					background-color: var(--paper-pink-a200) !important;
+					color: white !important;
+				};
+			}
+			paper-button.custom:hover {
+				background-color: var(--paper-indigo-100);
+			}
+			paper-button.pink {
+				color: var(--paper-pink-a200);
+
+			}
+			paper-button.indigo {
+				background-color: var(--primary-color);
+				/** /
+				background-color: var(--paper-indigo-500);
+				/**/
+				color: white;
+				--paper-button-raised-keyboard-focus: {
+					background-color: var(--paper-pink-a200) !important;
+					color: white !important;
+				};
+			}
+			paper-button.green {
+				background-color: var(--paper-green-500);
+				color: white;
+			}
+			paper-button.green[active] {
+				background-color: var(--paper-red-500);
+			}
+			paper-button.disabled {
+				color: white;
+			}
+			template [is=dom-repeat] {
+				        transition : .5s ;
+				     -o-transition : .5s ;
+				    -ms-transition : .5s ;
+				   -moz-transition : .5s ;
+				-webkit-transition : .5s ;
+			}
+		</style>
+			
+		<paper-fab id="fab"
+							 icon="add"
+							 on-tap="addItem">
+		</paper-fab>
+		<paper-toast id="toast"></paper-toast>
+		<paper-dialog id="modal" modal withBackdrop
+									entry-animation="scale-up-animation"
+									exit-animation="fade-out-animation">
+      <p>
+				Are you sure you want to <strong>delete</strong>
+				the item <strong>[[tempModalName]]</strong>?
+			</p>
+      <div class="buttons">
+        <paper-button dialog-dismiss on-tap="_modalClose">Cancel and keep</paper-button>
+        <paper-button dialog-confirm on-tap="_deleteItem"
+											xautofocus raised class="main"     >Delete [[tempModalName]]</paper-button>
+      </div>
+    </paper-dialog>
+
+		<!---- >
+		<paper-button on-tap="_show">Show</paper-button>
+		<!---->
+		
+		<firebase-collection
+			xorder-by-child="height"	
+			xlocation="https://radiant-heat-5197.firebaseio.com/programs"
+			location="[[app.fb.programs]]"
+		  data="{{items}}"
+			on-firebase-value="_firebaseLoaded"
+			log></firebase-collection>
+		
+		<div class="xfit layout vertical">
+			
+			<h1>Programs</h1>
+			
+			<div class="xfit layout horizontal">
+				
+				<paper-chip raised animated xactive xremovable>
+					<div class="icon">[[items.length]]</div>
+					<h1>Active</h1>
+					<h2>You have [[items.length]] active loan programs</h2>
+				</paper-chip>
+			
+				<paper-chip raised animated xactive xremovable>
+					<div class="icon">[[items.length]]</div>
+					<h1>Inactive</h1>
+					<h2>You have [[items.length]] inactive loan programs</h2>
+				</paper-chip>
+				
+			</div>
+			
+			<template is="dom-repeat" items="{{items}}" xas="item">
+				<app-programs-item name="{{item.name}}" 
+													 active="{{item.active}}" 
+												 	 data="{{item.data}}"
+													 summary="{{item.summary}}"
+													 on-delete="_onDelete">
+				</app-programs-item>
+			</template>
+			
+		</div>
+
+  </template>
+
+	<script>
+		(function(){
+			//'use strict';
+			Polymer({
+				is: 'app-programs',
+				properties: {
+					app: {
+						type: Object,
+						notify: true,
+						reflectToAttribute: true,
+					},
+					items: {
+						type: Array,
+						notify: true,
+						reflectToAttribute: true,
+						value: function() {
+							return [];
+						},
+					},
+				},
+				// Listen for ENTER key
+				_checkEnter: function(e) {
+					if (e.keyCode === 13) {
+						/** /
+						console.log(e);
+						this._formSubmit();
+						/**/
+						this.addItem();
+					}
+				},
+				/** /
+				observers: [
+ 					'_itemsAddedOrRemoved(items.splices)', // Array mutations, splices — Reference: https://www.polymer-project.org/1.0/docs/devguide/properties.html#array-observation
+				],
+				_itemsAddedOrRemoved: function(info) {
+					console.log(info);
+				},
+				/**/
+				_firebaseLoaded: function() {
+					if(!this.items) {
+						this.set('items', {});
+					}
+					//this.set('app.programs', this.items);
+				},
+				_onDelete: function(e) {
+					var index = e.model.index,
+							name = this.items[index]['name'];
+					this.set('tempModalIndex', index );
+					this.set('tempModalName' , name  );
+					this.$.modal.open();
+				},
+				_modalClose: function() {
+					this.set('tempModalIndex', null);
+					this.set('tempModalName' , null);
+					this.$.modal.close();
+				},
+				_editItem: function(e) {
+					console.log('edit', e);
+				},
+				_deleteItem: function() {
+					/** /
+					//console.log('delete', e.model.index);
+					var index = e.model.index;
+					/**/
+					var index = this.tempModalIndex, t = this.$.toast;
+					this.splice('items', index, 1);
+					this.set('tempModalIndex', null);
+					this.set('tempModalName' , null);
+					this.fire('toggle-changed');
+					t.text = 'Successfully deleted!';
+					t.open();
+					/**/
+				},
+				xaddItem: function() {
+					this.unshift( 'items', { name: 'Alpha',
+																	 active: false } );
+				},
+				addItem: function() {
+					var ob, a = this.items, t = this.$.toast;
+					if(a.length) {
+						ob = Object.assign( {} , a[0] );
+						ob.active = false;
+						if (!ob.data.states){
+							ob.data.states = [];
+						}
+					}else{
+						ob = Object.assign( {} , this.itemTemplate() );
+					}
+					//delete ob['__firebaseKey__'];
+					ob.name = this.nameTemplate(ob.name);
+					this.unshift( 'items', ob );
+					t.text = ['Successfully created ', ob.name, '!'].join('');
+					t.open();
+				},
+				itemTemplate: function() {
+					return {
+						// name: 'Alpha',
+						active: false,
+						data: { states: [],
+										qualifiers: ['noo', 'sfr', 'pur', 'brg',], // In 3 locations: 1. <app-programs>.addItem(): adds new instance; 2. <app-programs-item>.data: initializes; 3. <app-programs-item-qualifiers>.qualifiers: default setting
+										disqualifiers: [],
+										terms: {
+											amortizeFrom       :   1 ,
+											amortizeTo         :   1 ,
+											amountFrom         :   2 ,
+											amountTo           :  12 ,
+											amountAppraiseFrom :   0 ,
+											amountAppraiseTo   :  80 ,
+											amountArvFrom      :   0 ,
+											amountArvTo        :  80 ,
+											downFrom           :   5 ,
+											downTo             : 100 ,
+											feesFrom           :   0 ,
+											feesTo             : 200 ,
+											pointsFrom         :   1 ,
+											pointsTo           :   2 ,
+											rateFrom           :   1 ,
+											rateTo             :   2 ,
+											termFrom           :   6 ,
+											termTo             :  18 ,
+										},
+									},
+					}
+				},
+				nameTemplate: function(s) {
+					var a = [ 'Alpha', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Foxtrot', 'Golf', 'Hotel', 'India', 'Juliet', 'Kilo', 'Lima', 'Mike', 'November', 'Oscar', 'Papa', 'Quebec', 'Romeo', 'Sierra', 'Tango', 'Uniform', 'Victor', 'Whiskey', 'X-ray', 'Yankee', 'Zulu', ],
+							i, names = [], items = this.items;
+					i	= items.length;
+					while(i--) {
+						names.push(items[i].name);
+					}
+					i = a.reverse().length;
+					while(i--){
+						if( (s !== a[i]) && (names.indexOf(a[i]) === -1) ){
+							return a[i];
+						}
+					}
+					return new Date().getTime();
+				},
+
+			});
+		})();
+	</script>
+	
+</dom-module>

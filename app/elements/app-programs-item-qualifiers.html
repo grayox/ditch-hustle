@@ -1,0 +1,347 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+
+<!---- >
+xukegadata
+<!---->
+
+<dom-module id="app-programs-item-qualifiers">
+	<template>
+		<style>
+			paper-tooltip {
+				--paper-tooltip-text-color: var(--paper-yellow-500);
+				font-weight: bold;
+			}
+			.right {
+				text-align: right;
+			}
+			td {
+				padding-top: 6px;
+			}
+			h5, xsmall {
+				color: var(--paper-grey-400, #BDBDBD);
+			}
+			paper-checkbox {
+				--paper-checkbox-checked-color: var(--accent-color);
+				--paper-checkbox-checked-ink-color: var(--accent-color);
+			}
+		</style>
+		
+		<style>
+			paper-menu {
+				--paper-menu-background-color: white;
+				--paper-menu-selected-item: {
+        	color: white;
+					background-color: var(--accent-color);
+					transition         : .5s;
+					-o-transition      : .5s;
+					-ms-transition     : .5s;
+					-moz-transition    : .5s;
+					-webkit-transition : .5s;
+				}
+				--paper-menu-focused-item: {
+					transition         : .5s;
+					-o-transition      : .5s;
+					-ms-transition     : .5s;
+					-moz-transition    : .5s;
+					-webkit-transition : .5s;
+				}
+				--paper-menu-focused-item-after: {
+        	color: var(--primary-text-color);
+					background-color: var(--accent-color);
+				}
+			}
+			paper-item {
+				--paper-item: {
+					cursor: pointer;
+				};
+			}
+			paper-item:hover {
+				background-color: var(--paper-grey-200);
+				font-weight: bold;
+        xcolor: white;
+				transition         : .5s;
+				-o-transition      : .5s;
+				-ms-transition     : .5s;
+				-moz-transition    : .5s;
+				-webkit-transition : .5s;
+			}
+		</style>
+		
+		<style>
+			:host {
+				--paper-tab-ink: var(--accent-color);
+			}
+			paper-tabs {
+				--paper-tabs-selection-bar-color: var(--accent-color);
+			}
+		</style>
+		
+		<!---- >
+		<table xborder="1">
+			<tbody>
+				<tr>
+					<td class="icon-row bottom">
+						<span hidden$="[[expanded]]">
+							<paper-icon-button on-tap="_toggleSize"
+																 xicon="visibility"
+																 icon="chevron-right"
+																 xicon="expand-more"
+																 xicon="info-outline">
+							</paper-icon-button>
+							<paper-tooltip position="left">[[item.address]]</paper-tooltip>
+						</span>
+						<span hidden$="[[!expanded]]">
+							<paper-icon-button on-tap="_toggleSize"
+																 icon="expand-more"
+																 xicon="expand-less">
+							</paper-icon-button>
+							<paper-tooltip position="left">Show less</paper-tooltip>
+						</span>
+					</td>
+					<td>
+						<h3>Qualifiers</h3>
+						<paper-tooltip position="bottom">Paper tooltip goes here</paper-tooltip>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><small>[[selectedString]]</small></td>
+				</tr>
+				<!---- >
+				<tr>
+					<td></td>
+					<td>
+						<div hidden$="[[!expanded]]">
+							<h5>Ownership Status</h5>
+							<paper-tooltip>Check all that apply.</paper-tooltip>
+							<p>&nbsp;&nbsp;
+								<paper-tooltip>Owner Occupied</paper-tooltip>
+								<paper-checkbox>Owner-Occupied</paper-checkbox>
+							</p>
+							<p>&nbsp;&nbsp;
+								<paper-tooltip>Non Owner-Occupied</paper-tooltip>
+								<paper-checkbox checked>Non Owner-Occupied</paper-checkbox>
+							</p>
+							<h5>Collateral Type</h5>
+							<p>&nbsp;&nbsp;
+								<paper-tooltip>Single Family Residential</paper-tooltip>
+								<paper-checkbox checked>Single Family Residential</paper-checkbox>
+							</p>
+							<p>&nbsp;&nbsp;
+								<paper-tooltip>Duplex, triplex, quad</paper-tooltip>
+								<paper-checkbox>2-4 Units</paper-checkbox>
+							</p>
+							<p>&nbsp;&nbsp;
+								<paper-tooltip>Multi Unit Apartments</paper-tooltip>
+								<paper-checkbox>Multi Unit Apartments</paper-checkbox>
+							</p>
+							<p>&nbsp;&nbsp;
+								<paper-tooltip>Unimproved raw land</paper-tooltip>
+								<paper-checkbox>Land Only</paper-checkbox>
+							</p>
+							<p>&nbsp;&nbsp;
+								<paper-tooltip>Mobile homes</paper-tooltip>
+								<paper-checkbox>Mobile Homes</paper-checkbox>
+							</p>
+							<p>&nbsp;&nbsp;
+								<paper-tooltip>Commercial office space</paper-tooltip>
+								<paper-checkbox>Commercial Office</paper-checkbox>
+							</p>
+							<p>&nbsp;&nbsp;
+								<paper-tooltip>Commercial industrial space</paper-tooltip>
+								<paper-checkbox>Commercial Insustrial</paper-checkbox>
+							</p>
+						</div>
+					</td>
+				</tr>
+				<!---->
+				<!---- >
+				<tr>
+					<td></td>
+					<td>
+						<div hidden$="[[!expanded]]">
+							<paper-menu id="menu"
+													multi
+													xattrForSelected="name"
+													selectedAttribute="name"
+													selectedValues="{{selected}}">
+								<h5>Ownership</h5>
+								<paper-item name="oo"  >Owner-Occupied</paper-item>
+								<paper-item name="noo" >Non Owner-Occupied</paper-item>
+								<h5>Type</h5>
+								<paper-item name="sfr" >Single Family Residential</paper-item>
+								<paper-item name="dtq" >2-4 Units</paper-item>
+								<paper-item name="mult">Multi Unit Apartments</paper-item>
+								<paper-item name="land">Land Only</paper-item>
+								<paper-item name="mob" >Mobile Homes</paper-item>
+								<paper-item name="off" >Commercial Office</paper-item>
+								<paper-item name="ind" >Commercial Insustrial</paper-item>
+							</paper-menu>
+						</div>
+					</td>
+				</tr>
+				<!---- >
+			</tbody>
+		</table>
+		<!---->
+		
+		<paper-tooltip>
+			Select at least one type of collateral from each of the other two tabs: <i>Ownership</i> and <i>Collateral</i>.
+			Select all types of acceptable ownership status and collateral types that apply.
+			In the Disqualifiers tab, select all items which you screen for that will disqualify a loan application.
+		</paper-tooltip>
+		
+		<!---- >
+		<div hidden$="[[!expanded]]">
+		<!---->
+		
+			<paper-tabs selected="{{selectedTab}}">
+				<paper-tab>Ownership</paper-tab>
+				<paper-tab>Purpose</paper-tab>
+				<paper-tab>Type</paper-tab>
+				<paper-tab>Disqualifiers</paper-tab>
+			</paper-tabs>
+
+			<iron-pages selected="{{selectedTab}}">
+				<div>
+					<paper-menu id="qual1"
+											multi
+											attr-for-selected="name"
+											selected-values="{{qualifiers}}">
+						<paper-item name="oo"  >Owner-Occupied</paper-item>
+						<paper-item name="noo" >Non Owner-Occupied</paper-item>
+					</paper-menu>
+				</div>
+				<div>
+					<paper-menu id="qual2"
+											multi
+											attr-for-selected="name"
+											selected-values="{{qualifiers}}">
+						<paper-item name="pur" >Purchase</paper-item>
+						<paper-item name="brg" >Bridge</paper-item>
+						<paper-item name="refi">Refinance</paper-item>
+						<paper-item name="cash">Cash Out</paper-item>
+					</paper-menu>
+				</div>
+				<div>
+					<paper-menu id="qual3"
+											multi
+											attr-for-selected="name"
+											selected-values="{{qualifiers}}">
+						<paper-item name="sfr" >Single Family Residential</paper-item>
+						<paper-item name="dtq" >2-4 Units</paper-item>
+						<paper-item name="mult">Multi Unit Apartments</paper-item>
+						<paper-item name="land">Land Only</paper-item>
+						<paper-item name="mob" >Mobile Homes</paper-item>
+						<paper-item name="off" >Commercial Office</paper-item>
+						<paper-item name="ret" >Commercial Retail</paper-item>
+						<paper-item name="ind" >Commercial Insustrial</paper-item>
+					</paper-menu>
+				</div>
+				<div>
+					<paper-menu id="dq"
+											multi
+											attr-for-selected="name"
+											selected-values="{{disqualifiers}}">
+						<paper-item name="enty">Borrower is an &ldquo;individual&rdquo; &nbsp;<small>(not &ldquo;entity&rdquo;)</small></paper-item>
+						<paper-item name="fund">Insufficient Available Funds</paper-item>
+						<paper-item name="bk"  >Pending Bankruptcy</paper-item>
+						<paper-item name="bkz" >Prior Bankruptcy</paper-item>
+						<paper-item name="fore">Pending Foreclosures</paper-item>
+						<paper-item name="forz">Prior Foreclosures</paper-item>
+						<paper-item name="job" >Unsatisfactory Job History</paper-item>
+						<paper-item name="crim">Criminal History</paper-item>
+						<paper-item name="cred">No Credit History</paper-item>
+						<paper-item name="fico">Bad Credit History &nbsp;<small>(per FICO score)</small></paper-item>
+						<paper-item name="tax" >Tax Liens &nbsp;<small>(Federal or State)</small></paper-item>
+						<paper-item name="judg">Unpaid Judgments</paper-item>
+						<paper-item name="coll">Unpaid Collections</paper-item>
+						<paper-item name="chof">Unpaid Chargeoffs</paper-item>
+					</paper-menu>
+				</div>
+				
+			</iron-pages>
+			
+		<!---- >
+			<paper-button on-tap="_show">Show Data</paper-button>
+			
+		</div>
+		<!---->
+
+	</template>
+	<script>
+		(function() {
+			Polymer({
+				is: 'app-programs-item-qualifiers',
+				properties: {
+					expanded: {
+						type: Boolean,
+						value: function() {
+							return true;
+							//return false;
+						}
+					},
+					qualifiers: {
+						type: Array,
+						notify: true,
+						value: function() {
+							return ['noo', 'sfr', 'pur', 'brg',]; // In 3 locations: 1. <app-programs>.addProgram(): adds new instance; 2. <app-programs-item>.data: initializes; 3. <app-programs-item-qualifiers>.qualifiers: default setting
+							//return [1, 4];
+						},
+					},
+					disqualifiers: {
+						type: Array,
+						notify: true,
+						/** /
+						value: function() {
+							return ['bk', 'job'];
+							//return [1, 4];
+						},
+						/**/
+					},
+					/** /
+					selectedString: {
+						type: String,
+						notify: true,
+						computed: '_computeselectedString(selected.length)'
+					},
+					/**/
+				},
+				
+				/** /
+				_computeselectedString: function(selectedInfo){
+					return this.selected.join(', ');
+				},
+				/** /
+				_toggleSize: function() {
+					//console.log(this.item);
+					//this.fire('item-act', { action: 'size' });
+					this.set('expanded', !this.expanded);
+				},
+				
+				/** /
+				_show: function() {
+					//console.log('properties', this.$.menu.properties);
+					//console.log('items', this.$.menu.items);
+					console.log('selectedValues', this.$.menu.selectedValues);
+					console.log('selected', this.selected);
+				},
+				/**/
+				
+			});
+		})();
+	</script>
+</dom-module>

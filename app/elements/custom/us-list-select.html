@@ -1,0 +1,158 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../bower_components/paper-menu/paper-menu.html">
+
+<dom-module id="us-list-select">
+	<template>
+		<style>
+			paper-tooltip {
+				--paper-tooltip-text-color: var(--paper-yellow-500);
+				font-weight: bold;
+			}
+			.right {
+				text-align: right;
+			}
+			td {
+				padding-top: 6px;
+			}
+			h5, xsmall {
+				color: var(--paper-grey-400, #BDBDBD);
+			}
+			paper-checkbox {
+				--paper-checkbox-checked-color: var(--accent-color);
+				--paper-checkbox-checked-ink-color: var(--accent-color);
+			}
+		</style>
+		
+		<style>
+			paper-menu {
+				--paper-menu-background-color: white;
+				--paper-menu-selected-item: {
+        	color: white;
+					background-color: var(--accent-color);
+					transition         : .5s ;
+					-o-transition      : .5s ;
+					-ms-transition     : .5s ;
+					-moz-transition    : .5s ;
+					-webkit-transition : .5s ;
+				}
+				--paper-menu-focused-item: {
+					transition         : .5s ;
+					-o-transition      : .5s ;
+					-ms-transition     : .5s ;
+					-moz-transition    : .5s ;
+					-webkit-transition : .5s ;
+				}
+				--paper-menu-focused-item-after: {
+        	color: var(--primary-text-color);
+					background-color: var(--accent-color);
+				}
+			}
+			paper-item {
+				--paper-item: {
+					cursor: pointer;
+				};
+			}
+			paper-item:hover {
+				background-color: var(--paper-grey-200);
+				font-weight: bold;
+        xcolor: white;
+				transition         : .5s;
+				-o-transition      : .5s;
+				-ms-transition     : .5s;
+				-moz-transition    : .5s;
+				-webkit-transition : .5s;
+			}
+		</style>
+		
+		<style>
+			:host {
+				--paper-tab-ink: var(--accent-color);
+			}
+			paper-tabs {
+				--paper-tabs-selection-bar-color: var(--accent-color);
+			}
+		</style>
+		
+		<div class="container flex layout vertical">
+			<div hidden$="[[!showButtons]]" class="flex-reversed">
+				<paper-button on-tap="selectAll">Select All</paper-button>
+				<paper-button on-tap="clearAll">Clear All</paper-button>
+			</div>			
+			<div hidden$="[[!showSummary]]">[[selectedString]]</div>
+			<paper-menu multi
+									attr-for-selected="name"
+									selected-values="{{selected}}">
+				<template is="dom-repeat" items="[[items]]" xas="item">
+					<paper-item name="[[item]]" label="[[item]]">[[item]]</paper-item>
+				</template>
+			</paper-menu>
+		</div>
+		
+	</template>
+	<script>
+		(function() {
+			Polymer({
+				is: 'us-list-select',
+				properties: {
+					expanded: {
+						type: Boolean,
+						value: false,
+					},
+					showSummary: {
+						type: Boolean,
+						value: false,
+					},
+					showButtons: {
+						type: Boolean,
+						value: false,
+					},
+					items: {
+						type: Array,
+						notify: true,
+						reflectToAttribute: true,
+						value: function() {
+							return [ 'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming', ].sort();
+						},
+					},
+					selected: {
+						type: Array,
+						notify: true,
+						reflectToAttribute: true,
+					},
+					selectedString: {
+						type: Array,
+						notify: true,
+						reflectToAttribute: true,
+						computed: '_computeSelectedString(selected.length)',
+					},
+				},
+				_computeSelectedString: function(info) {
+					if ( !info ) {
+						return '' ;
+					}
+					var selected = this.selected;
+					selected.sort();
+					this.fire('us-list-select', selected);
+					return selected.join(', ');
+				},
+				clearAll: function() {
+					this.set('selected', [].slice());
+				},
+				selectAll: function() {
+					this.set('selected', this.items.slice());
+				},
+			});
+		})();
+	</script>
+</dom-module>

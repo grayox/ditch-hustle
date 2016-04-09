@@ -1,0 +1,81 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../../../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../../../bower_components/paper-tooltip/paper-tooltip.html">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+<dom-module id="login-button-menu">
+	
+	<template>
+
+		<style>
+			paper-menu {
+				--paper-menu-background-color: white;
+			}
+			paper-menu paper-item {
+				cursor: pointer;
+				border-radius: 5px;
+				color: black;
+				background: white;
+				transition         : 1.25s;
+				-o-transition      : 1.25s;
+				-ms-transition     : 1.25s;
+				-moz-transition    : 1.25s;
+				-webkit-transition : 1.25s;
+			}
+			paper-menu paper-item:hover {
+				font-weight: bold;
+				color: white;
+				background: black;
+				transition         : 1.25s;
+				-o-transition      : 1.25s;
+				-ms-transition     : 1.25s;
+				-moz-transition    : 1.25s;
+				-webkit-transition : 1.25s;
+			}
+		</style>
+	
+		<span>
+			<paper-icon-button icon="power-settings-new"
+												 on-tap="_modalOpen"></paper-icon-button>
+			<paper-tooltip>Login</paper-tooltip>
+		</span>
+		<paper-dialog id="modal" modal>
+			<paper-menu id="menu">
+				<paper-item on-tap="login" data-provider="google"   ><span class="fa fa-lg xfa-4x fa-fw fa-google           "></span>&nbsp;login with Google     </paper-item>
+				<paper-item on-tap="login" data-provider="facebook" ><span class="fa fa-lg xfa-4x fa-fw fa-facebook-official"></span>&nbsp;login with Facebook   </paper-item>
+				<paper-item on-tap="login" data-provider="google"   ><span class="fa fa-lg xfa-4x fa-fw fa-envelope         "></span>&nbsp;login with Gmail      </paper-item>
+				<paper-item on-tap="login" data-provider="twitter"  ><span class="fa fa-lg xfa-4x fa-fw fa-twitter          "></span>&nbsp;login with Twitter    </paper-item>
+				<paper-item on-tap="login" data-provider="google"   ><span class="fa fa-lg xfa-4x fa-fw fa-google-plus      "></span>&nbsp;login with Google Plus</paper-item>
+				<paper-item on-tap="_modalClose"                    ><iron-icon icon="close"></iron-icon>                            &nbsp;Cancel login          </paper-item>
+			</paper-menu>
+    </paper-dialog>
+  </template>
+
+  <script>
+    (function() {
+      //'use strict';
+      Polymer({
+        is: 'login-button-menu',
+				login: function(e) {
+					this._modalClose();
+	  		  var provider = Polymer.dom(e).rootTarget.getAttribute('data-provider');
+					this.fire('login-button-menu', provider);
+					//console.log('provider', provider);
+				},
+				_modalOpen: function() {
+					this.$.menu.selected = null;
+					this.$.modal.open();
+				},
+				_modalClose: function() {
+					this.$.modal.close();
+				},
+	    });
+    })();
+  </script>
+</dom-module>

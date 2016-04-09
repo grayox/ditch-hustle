@@ -1,0 +1,31 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+
+<dom-module id="logout-button">
+	
+	<template>
+
+		<style></style>
+		
+		<span>
+			<paper-icon-button icon="power-settings-new"
+												 on-tap="logout"></paper-icon-button>
+			<paper-tooltip>Logout</paper-tooltip>
+		</span>
+	
+	</template>
+
+  <script>
+    (function() {
+      //'use strict';
+      Polymer({
+        is: 'logout-button',
+				logout: function() {
+					this.fire('logout-button');
+				},
+      });
+    })();
+  </script>
+</dom-module>

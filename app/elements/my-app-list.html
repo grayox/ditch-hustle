@@ -1,0 +1,311 @@
+<!---- >
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+<!---->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/firebase-element/firebase-collection.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/iron-swipeable-container/iron-swipeable-container.html">
+
+<!---- >
+<link rel="import" href="../../bower_components/neon-animation/animations/ease-in-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/ease-out-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/slide-down-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animation-runner-behavior.html">
+<!---->
+
+<link rel="import" href="my-app-item.html">
+
+
+<dom-module id="my-app-list">
+	
+  <template>
+
+    <style>
+      :host {
+        display: block;
+				height: calc(100vh + 200px);
+      }
+      iron-list {
+				margin: 0;
+				height: 100vh;
+				xwidth: 100%;
+        padding-top: 1px;
+        padding-bottom: 16px;
+        -webkit-flex: 1 1;
+        flex: 1 1;
+        --iron-list-items-container: {
+					/** /
+          margin-top: 60px;
+          margin-bottom: 60px;
+					margin: 0px 26px 10px 4px;
+					margin: 0px;
+					height: 100vh;
+					/**/
+          max-width: 800px;
+          margin: 20px auto;
+          border-bottom: 1px solid #ddd;
+	      }
+      }
+			/**/
+			.item {
+				transition         : 2.5s;
+				-o-transition      : 2.5s;
+				-ms-transition     : 2.5s;
+				-moz-transition    : 2.5s;
+				-webkit-transition : 2.5s;
+			}
+			/**/
+    </style>
+		<!---- >
+    <iron-localstorage name="movies"
+                       on-iron-localstorage-load="_backupLoaded"
+                       value="{{items}}">
+    </iron-localstorage>
+		<!---->
+		<paper-button on-tap="_showItems">Show Items</paper-button>[[action]]
+		<!---->
+		<firebase-collection id="fbc"
+												 xorder-by-child="timestamp"
+												 xorder-by-child="address"
+												 xorder-by-child="autoEst"
+												 xorder-by-child="{{sortVal}}"
+												 xlimit-to-first="3"
+												 xlocation="https://dinosaur-facts.firebaseio.com/dinosaurs"
+												 xlocation="https://my-firebase.firebaseio.com/my-node"
+												 location="[[app.fb.siti]]"
+												 data="{{items}}"
+												 xdata="{{fbItems}}"
+												 xon-firebase-value="_firebaseLoaded">
+		</firebase-collection>
+		<iron-list id="list"
+							 items="[[items]]"
+							 as="item"
+							 selected-items="{{selectedItems}}"
+							 selection-enabled
+							 multi-selection>
+			<template>
+				<!--<iron-swipeable-container width-ratio="0.8" swipe-style="curve">-->
+					<my-app-item class="item"
+											 item="[[item]]"
+											 on-tap="_onItemTap"
+											 selected="{{selected}}">
+					</my-app-item>
+				<!--</iron-swipeable-container>-->
+			</template>
+		</iron-list>
+		
+  </template>
+  <script>
+		(function(){
+			Polymer({
+				is: 'my-app-list',
+				/** /
+				behaviors: [
+					Polymer.NeonAnimationRunnerBehavior,
+					Polymer.NeonSharedElementAnimatableBehavior
+				],
+				/**/
+				properties: {
+					/** /
+					animationConfig: {
+      			type: Object,
+						value: function() {
+							return {
+								entry: [
+									{
+										animatable: this.$.list,
+										type: 'entry'
+									}, /*{
+										name: 'cascaded-animation',
+										animation: 'slide-down-animation',
+										nodes: this.$.items
+										//nodedelay: <node-delay-in-ms>,
+										//timing: <animation-timing>
+									}, {
+										name: 'cascaded-animation',
+										animation: 'fade-in-animation',
+										nodes: this.$.items
+										//nodedelay: <node-delay-in-ms>,
+										//timing: <animation-timing>
+									}, * /{
+										name: 'cascaded-animation',
+										animation: 'transform-animation',
+										transformFrom: 'translateY(100%)',
+										transformTo: 'none',
+										timing: {
+											delay: 50
+										}
+									}
+								],
+								exit: [
+									
+								]
+							}
+						},
+					},
+					/**/
+					fbItems: {
+						type: Array,
+						notify: true
+					},
+					items: {
+						type: Array,
+						notify: true
+					},
+					selectedItems: {
+						type: Object,
+						notify: true
+					},
+					action: {
+						type: String,
+						notify: true,
+						value: function() {
+							return 'null'; // add, remove, delete, none, null
+						}
+					}
+				},
+				/** /
+				show: function() {
+					this.style.visibility = 'visible';
+					this.playAnimation('entry');
+				},
+				/** /
+				attached: function() {
+					this.playAnimation('entry');
+				},
+				/** /
+				attached: function() {
+					this.async(function() {
+						var nodeList = Polymer.dom(this.root).querySelectorAll('.item');
+						this.animationConfig['entry'][0].nodes = Array.prototype.slice.call(nodeList);
+					});
+				},
+				/**/
+				_showItems: function() {
+					console.log(this.items);
+					/** /
+					console.log(this.fbItems);
+					console.log(this.$.fbc.location);
+					console.log(this.selectedItems);
+					this.show();
+					/**/
+				},
+				/**/
+				listeners: {
+					'iron-swipe'         : '_onSwipe',
+					'item-act'           : '_onItemAct',
+					'item-toggle-select' : '_onToggleSelect',
+				},
+				/** /
+				_onSwipe: function(e) {
+					this.fire('iron-resize');
+				},
+				/**/
+				_onToggleSelect: function(e) {
+					this.$.list.toggleSelectionForItem(e.model.index);
+				},
+				_onItemAct: function(e) {
+					this.set('action', e.detail.action);
+				},
+				_onItemTap: function(e) {
+					//console.log(e);
+          this.$.list.updateSizeForItem(e.model.index);
+					//this.$.list.updateViewportBoundaries();
+					// Do if this.action is already set
+					//var i = 1;
+					do{
+						//console.log(i++);
+						switch(this.action) {
+							case 'size':
+          			//this.$.list.toggleSelectionForItem(e.model.index);
+								break;
+							case 'delete':
+          			//this.$.list.toggleSelectionForItem(e.model.index);
+								//this.playAnimation('exit');
+								//this.items.splice(e.model.index, 1);
+								this.splice('items', e.model.index, 1);
+								this.$.list.fire('iron-resize');
+								break;
+						}
+						this.set('action', 'null');
+					// Otherwise, wait for action to be set
+					}while(this.action !== 'null');
+					// Wait to receive new action via fire signal
+					// Wait to receive item or index via e.model.index or e.model.item
+					// When we have both action and index, take the action
+					// Reset action to zero
+					this.set('action', 'null');
+				},
+				/*,
+				behaviors: [
+					//Polymer.NeonAnimationRunnerBehavior
+				],
+				properties: {
+					animationConfig: {
+						value: function() {
+							return {
+								'entry': {
+									name: 'cascaded-animation',
+									animation: 'slide-down-animation',
+									nodes: function() {
+										return Array.prototype.slice.call(this.items);
+									}
+									//nodedelay: 50,
+									//timing: {
+										//duration: 500
+										//easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+										//fill: 'both'
+									//}
+								}
+							}
+						}
+					}
+				},
+				_loadItems: function() {
+					this.playAnimation('entry');
+				}
+				*/
+				/*,
+				properties: {
+					items: Array,
+					filterBy: {
+						type: String,
+						value: 'all'
+					}
+				},
+				_itemsEmpty: function(length) {
+					return !!length;
+				},
+				_computeFilter: function(filterBy) {
+					if (filterBy) {
+						// If filterBy is 'all', return a filter that always returns
+						// the item
+						if (filterBy === 'all') {
+							return function() {
+								return true;
+							};
+						}
+						// Handle 'completed', or its inverse, 'active'
+						var ifComplete = (filterBy === 'completed');
+						return function(item) {
+							return item.isComplete === ifComplete;
+						};
+					}
+				}*/
+			});
+		})();
+  </script>
+</dom-module>
+

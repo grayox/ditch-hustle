@@ -1,0 +1,76 @@
+<!---- >
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+<!---->
+
+<!---- >
+http://jsbin.com/najakoraqa/edit?html,output
+<!---->
+
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+<dom-module id="custom-logo">
+	
+  <template>
+	
+		<style>
+			
+			:host {
+				font-size: 100px;
+				color: var(--accent-color);
+				/** /
+				color: var(--paper-amber-500);
+				/**/
+			}
+
+			.fa-logo:before {
+				font-family: Impact, Charcoal, sans-serif;
+				font-weight: bold;
+				font-style: italic;
+			}
+
+			.fa-l:before {
+				content: 'L';
+				margin-right: -.2em;
+			}
+
+			.fa-z:before {
+				content: 'Z';
+				margin-left: -.4em;
+			}
+			
+		</style>
+				
+		<!---- >
+    http://fortawesome.github.io/Font-Awesome/icons/
+    Web Application Icons
+    &#10148 anchor balance-scale bank bar-chart bar-chart-o bell binoculars
+    bolt cloud cloud-download cloud-upload code code-fork coffee comment compass
+    cubes dashboard diamond exclamation external-link-square eye feed film fire flag flash flask
+    gavel gears gift globe graduation-cap group heart heartbeat home hourglass
+    industry institution key legal leaf lightbulb-o line-chart location-arrow
+    lock magic plug send send-o share-alt shield signal tachometer thumbs-up trophy
+    <!---->
+		<span class="fa fa-logo fa-l"></span>
+		<span class="fa fa-bolt"></span>
+		<span class="fa fa-logo fa-z"></span>
+
+  </template>
+
+	<script>
+		(function(){
+			//'use strict';
+			Polymer({
+				is: 'custom-logo',
+				properties: {
+				},	
+			});
+		})();
+	</script>
+	
+</dom-module>

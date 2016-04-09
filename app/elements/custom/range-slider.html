@@ -1,0 +1,600 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!---- >
+Development History
+http://jsbin.com/cujerihozo/1/edit?html,output
+http://jsbin.com/takociqoso/1/edit?html,output
+http://jsbin.com/fubakujoyo/1/edit?html,output
+http://jsbin.com/poxuheqira/1/edit?html,output deleted below as unnecessary
+http://jsbin.com/sovaxowuza/1/edit?html,output var _this=this,vals=keys.map(function(k){return _this.get(k);}), See: http://javascriptplayground.com/blog/2012/04/javascript-variable-scope-this/
+http://jsbin.com/gadedadunu/1/edit?html,output
+http://jsbin.com/havupigica/1/edit?html,output
+http://jsbin.com/nuzoqojije/1/edit?html,output
+http://jsbin.com/bezowugaka/1/edit?html,output - part of SO answer
+-- SO question -- Properties / setters -- http://stackoverflow.com/a/35030473/1640892
+http://jsbin.com/poxosavase/1/edit?html,output
+http://jsbin.com/waciqiniwo/1/edit?html,output
+http://jsbin.com/qenafikozu/1/edit?html,output
+http://jsbin.com/suhikebuse/1/edit?html,output
+http://jsbin.com/benutefipu/1/edit?html,output
+-- SO question -- Access properties -- http://stackoverflow.com/q/35026209/1640892
+http://jsbin.com/jaqaguzemo/1/edit?html,output
+http://jsbin.com/jehazucuzo/1/edit?html,output
+http://jsbin.com/kiforuyohu/1/edit?html,output
+http://jsbin.com/vijoyuyogo/1/edit?html,output
+http://jsbin.com/ridigekupu/1/edit?html,output
+http://jsbin.com/kudocihihe/1/edit?html,output
+http://jsbin.com/jelogenude/1/edit?html,output
+http://jsbin.com/xayegodele/1/edit?html,output
+-- Slack question -- Bind data
+http://jsbin.com/titexexele/1/edit?html,output
+http://jsbin.com/yiqenurujo/1/edit?html,output
+-- SO question -- Wrap jQuery -- http://stackoverflow.com/q/34984747/1640892
+http://jsbin.com/jesozeloki/1/edit?html,output
+<!---->
+
+<!---- >
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+  <base href="https://polygit.org/components/">
+  <script src="webcomponentsjs/webcomponents-lite.min.js"></script>
+  <link href="polymer/polymer.html" rel="import">
+  
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://ionden.com/a/plugins/ion.rangeSlider/static/js/ion-rangeSlider/ion.rangeSlider.js"></script>
+  <link rel="stylesheet" href="http://ionden.com/a/plugins/ion.rangeSlider/static/css/ion.rangeSlider.css">
+  <link rel="stylesheet" href="http://ionden.com/a/plugins/ion.rangeSlider/static/css/ion.rangeSlider.skinFlat.css">
+</head>
+<body>
+<!---->
+	
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+
+<!---->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!---->
+<script src="../../../bower_components/ion.rangeslider/js/ion.rangeSlider.js"></script>
+<link rel="stylesheet" href="../../../bower_components/ion.rangeslider/css/ion.rangeSlider.css">
+<link rel="stylesheet" href="../../../bower_components/ion.rangeslider/css/ion.rangeSlider.skinFlat.css">
+  
+<dom-module id="range-slider">
+  
+<template>
+  <style>
+    /** /
+    References:
+    http://jsfiddle.net/IonDen/qv6yrjrv/
+    http://ionden.com/a/plugins/ion.rangeSlider/demo_advanced.html
+    https://github.com/IonDen/ion.rangeSlider#settings
+    /**/
+    :host {
+      /**/
+      font-family: roboto, tahoma, arial, sans-serif;
+      /**/
+    }
+  </style>
+  <input type="text"
+         class="js-range-slider"
+         id="slider"
+         value=""
+         xdata-type="double"
+         xdata-min="0"
+         xdata-max="36"
+         xdata-prefix="$"
+         xdata-postfix=" months"
+         data-force-edges="true"
+         data-grid="true"
+         xdata-grid-num="9"
+         xdata-step="1"
+         data-grid-snap="true"
+         xdata-drag-interval="true"
+  />
+	<!---- >
+  <div>
+    from <span>{{from}}</span>
+    to <span>{{to}}</span>
+  </div>
+  <button on-tap="_show">Show</button>
+	<!---->
+</template>
+  
+<script>
+  (function(){
+    Polymer({
+      is: 'range-slider',
+      properties: {
+        
+        /**
+         * Choose slider type:
+         * 'single' for one handle
+         * 'double' for two handles
+         */
+        type: {
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+          value: 'double',
+        },
+        
+        /**
+         * Set slider minimum value
+         */
+        min: {
+          type: Number,
+          notify: true,
+          reflectToAttribute: true,
+          value: 10,
+        },
+        
+        /**
+         * Set slider maximum value
+         */
+        max: {
+          type: Number,
+          notify: true,
+          reflectToAttribute: true,
+          value: 100,
+        },
+        
+        /**
+         * Set start position for left handle (or for single handle)
+         */
+        from: {
+          type: Number,
+          notify: true,
+          reflectToAttribute: true,
+          value: function(){
+            return this.min;
+          }
+        },
+        
+        /**
+         * Set start position for right handle
+         */
+        to: {
+          type: Number,
+          notify: true,
+          reflectToAttribute: true,
+          value: function(){
+            return this.max;
+          }
+        },
+        
+        /**
+         * Set sliders step. Always > 0. Could be fractional.
+         */
+        step: {
+          type: Number,
+          notify: true,
+          reflectToAttribute: true,
+          value: 1
+        },
+        
+        /**
+         * Set minimum diapason between sliders.
+         * Only in "double" type
+         */
+        min_interval: {
+          type: Number,
+          notify: true,
+          reflectToAttribute: true,
+        },
+        
+        /**
+         * Set maximum diapason between sliders.
+         * Only in "double" type
+         */
+        max_interval: {
+          type: Number,
+          notify: true,
+          reflectToAttribute: true,
+        },
+        
+        /**
+         * Allow user to drag whole range.
+         * Only in "double" type (beta)
+         */
+        drag_interval: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value: false
+        },
+        
+        /**
+         * Set up your own array of possible slider values.
+         * They could be numbers or strings.
+         * Disables 'min', 'max' and 'step'.
+         */
+        values: {
+          type: Array,
+          notify: true,
+          reflectToAttribute: true,
+          value: function() {
+            return [];
+          }
+        },
+        
+        /**
+         * Fix position of left (or single) handle.
+         */
+        from_fixed: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value: false
+        },
+        
+        /**
+         * Set minimum limit for left handle.
+         */
+        from_min: {
+          type: Number,
+          notify: true,
+          reflectToAttribute: true,
+          value: function(){
+            return this.min;
+          }
+        },
+        
+        /**
+         * Set maximum limit for left handle.
+         */
+        from_max: {
+          type: Number,
+          notify: true,
+          reflectToAttribute: true,
+          value: function(){
+            return this.max;
+          }
+        },
+        
+        /**
+         * Highlight the limits for left handle
+         */
+        from_shadow: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value: false
+        },
+        
+        /**
+         * Fix position of right handle.
+         */
+        to_fixed: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value: false
+        },
+        
+        /**
+         * Set minimum limit for right handle.
+         */
+        to_min: {
+          type: Number,
+          notify: true,
+          reflectToAttribute: true,
+          value: function() {
+            return this.min;
+          }
+        },
+        
+        /**
+         * Set maximum limit for right handle.
+         */
+        to_max: {
+          type: Number,
+          notify: true,
+          reflectToAttribute: true,
+          value: function(){
+            return this.max;
+          }
+        },
+        
+        /**
+         * Highlight the limits for right handle
+         */
+        to_shadow: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value: false
+        },
+        
+        /**
+         * Improve readability of long numbers. 10000000 → 10 000 000
+         */
+        prettify_enabled: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value: true
+        },
+        
+        /**
+         * Set up your own separator for long numbers:
+         * 10 000, 10.000, 10-000
+         */
+        prettify_separator: {
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+          value: function() {
+            return ' ';
+          }
+        }, 
+        
+        /**
+         * Set up your own prettify function. Can be anything.
+         * For example, you can set up unix time as slider values
+         * and than transform them to cool looking dates.
+         */
+        prettify: {
+          type: Function,
+          notify: true,
+          reflectToAttribute: true,
+          value: null
+        }, 
+    
+        /**
+         * Slider will be always inside it's container.
+         */
+        force_edges: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value: false
+        },
+        
+        /**
+         * Activates keyboard controls.
+         * Move left: ←, ↓, A, S. Move right: →, ↑, W, D.
+         */
+        keyboard: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value: false
+        },
+        
+        /**
+         * Movement step (in percents) when controlling from keyboard.
+         */
+        keyboard_step: {
+          type: Number,
+          notify: true,
+          reflectToAttribute: true,
+          value: 5
+        },
+
+        /**
+         * Enables grid of values.
+         */
+        grid: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value: false
+        },
+        
+        /**
+         * Set left and right grid borders.
+         */
+        grid_margin: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value: true
+        },
+        
+        /**
+         * Number of grid units.
+         */
+        grid_num: {
+          type: Number,
+          notify: true,
+          reflectToAttribute: true,
+          value: 4
+        },
+        
+        /**
+         * Snap grid to sliders step (step param).
+         * If true, grid_num will not be used.
+         */
+        grid_snap: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value: false
+        },
+        
+        /**
+         * Hides min and max labels
+         */
+        hide_min_max: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value: false
+        },
+         
+        /**
+         * Hide from and to lables
+         */
+        hide_from_to: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value: false
+        },       
+        
+        /**
+         * Set prefix for values.
+         * Will be set up right before the number: $100
+         */
+        prefix: {
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+          value: function() {
+            return '';
+          }
+        }, 
+        
+        /**
+         * Set postfix for values.
+         * Will be set up right after the number: 100k
+         */
+        postfix: {
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+          value: function() {
+            return '';
+          }
+        }, 
+        
+        /**
+         * Special postfix, used only for maximum value.
+         * Displayed when handle reaches maximum right position.
+         * For example 0 — 100+
+         */
+        max_postfix: {
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+          value: function() {
+            return '';
+          }
+        },
+
+        /**
+         * Used for "double" type and only if prefix or postfix was set up.
+         * Determine how to decorate close values.
+         * For example: $10k — $100k (true) vs $10 — 100k (false)
+         */
+        decorate_both: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value: true
+        },
+
+        /**
+         * Set your own separator for close values.
+         * Used for "double" type. Default: 10 — 100.
+         * Or you may set: 10 to 100, 10 + 100, 10 → 100 etc.
+         */
+        values_separator: {
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+          value: function() {
+            return ' — ';
+          }
+        },
+
+        /**
+         * Separator for double values in input value property.
+         */
+        input_values_separator: {
+          type: String,
+          notify: true,
+          reflectToAttribute: true,
+          value: function() {
+            return ' ; ';
+          }
+        },
+         
+        /**
+         * Locks slider and makes it inactive.
+         */
+        disable: {
+          type: Boolean,
+          notify: true,
+          reflectToAttribute: true,
+          value: false
+        },  
+        
+      },
+      ready: function(){
+        var _this = this; // See: http://javascriptplayground.com/blog/2012/04/javascript-variable-scope-this/
+        $(this.$.slider).ionRangeSlider(_this.sliderConfig);
+      },
+      get sliderConfig(){
+        var keys = Object.keys(this.properties),
+            out = { component: this,
+                    properties: this.properties,
+                    onChange: this._onSliderChange,
+                  },
+            i = keys.length;
+        while(i--){
+          out[keys[i]] = this[keys[i]];
+        }
+        return out;
+      },
+      _onSliderChange: function(data) {
+        var a = Object.keys(this.properties),
+            i = a.length;
+        while(i--) {
+          this.component.set(a[i], data[a[i]]);
+        }
+      },
+			/** /
+      _show: function(){
+        console.log(this.properties);
+      }
+			/**/
+    });
+  })();
+  
+    /**
+     * Callback. Is called on slider start.
+     *
+     * @method onStart
+     */
+    /**
+     * Callback. IS called on each values change.
+     *
+     * @method onChange
+     */
+    /**
+     * Callback. Is called than user releases handle.
+     *
+     * @method onFinish
+     */
+    /**
+     * Callback. Is called when slider is modified by external
+     * methods update or reset.
+     *
+     * @method onUpdate
+     */
+  
+</script>
+
+</dom-module>
+  
+<!---- >
+<range-slider
+  type="double"
+  min="0"
+  max="48"
+  from="6"
+  to="18"
+  step="3"
+  xdrag-interval="true"         
+></range-slider>
+  
+</body>
+<!---->

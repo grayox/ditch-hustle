@@ -10,6 +10,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
+<!-- App Layout elements -->
+<link rel="import" href="../../bower_components/app-layout/app-layout.html">
+
+<!-- Firebase elements -->
+<link rel="import" href="../../bower_components/firebase-element/firebase-auth.html"> <!-- v1.0.2 bower install --save GoogleWebComponents/firebase-element -->
+<link rel="import" href="../../bower_components/firebase-element/firebase-collection.html">
+<link rel="import" href="../../bower_components/firebase-element/firebase-document.html">
+
 <!-- Iron elements -->
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
@@ -18,22 +26,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
 <!-- Added -->
-<link rel="import" href="../../bower_components/firebase-element/firebase-auth.html"> <!-- v1.0.2 bower install --save GoogleWebComponents/firebase-element -->
-<link rel="import" href="../../bower_components/firebase-element/firebase-document.html"> <!-- v1.0.2 bower install --save GoogleWebComponents/firebase-element -->
-<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/device-icons.html">
 <link rel="import" href="../../bower_components/iron-icons/editor-icons.html">
 <link rel="import" href="../../bower_components/iron-icons/image-icons.html">
 <link rel="import" href="../../bower_components/iron-icons/hardware-icons.html">
 <link rel="import" href="../../bower_components/iron-icons/maps-icons.html">
 <link rel="import" href="../../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../../bower_components/iron-swipeable-container/iron-swipeable-container.html">
 <!--
 <link rel="import" href="../../bower_components/iron-meta/iron-meta.html">
 <link rel="import" href="../../bower_components/iron-signals/iron-signals.html">
 -->
+
+<link rel="import" href="../../bower_components/neon-animation/animations/slide-down-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animation-runner-behavior.html">
 
 <!-- Paper elements -->
 <link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
@@ -47,18 +61,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
 	<!-- Added -->
+<link rel="import" href="../../bower_components/paper-badge/paper-badge.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/paper-dialog-behavior/paper-dialog-behavior.html">
 <link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
-<!--<link rel="import" href="../../bower_components/paper-dropdown/paper-dropdown.html">--><!--Vulcanize error-->
+<link rel="import" href="../../bower_components/paper-dropdown/paper-dropdown.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
 <link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
-<!--<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">--><!--Vulcanize error-->
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
 <!-- To be replaced in 1.0
 		 See roadmap here: https://github.com/PolymerElements/paper-elements
 											 https://github.com/Polymer/paper-dropdown-menu/issues/63 -- >
@@ -74,6 +93,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <!-- Google elements -->
 	<!-- Added -->
 <link rel="import" href="../../bower_components/firebase-element/firebase-document.html"> <!-- v1.0.2 bower install --save GoogleWebComponents/firebase-element -->
+<link rel="import" href="../../bower_components/google-chart/google-chart.html">
 <!-- Vulcanize error
 <link rel="import" href="../../bower_components/google-map/google-map.html">
 <link rel="import" href="../../bower_components/google-map/google-map-directions.html">
@@ -86,15 +106,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <!-- Add your elements here -->
 <link rel="import" href="../styles/app-theme.html">
 	<!-- Added -->
-<link rel="import" href="my-argenta-data/my-argenta-data.html">
-<link rel="import" href="my-argenta-form/my-argenta-form.html">
-<link rel="import" href="my-argenta-image/my-argenta-image.html">
-<link rel="import" href="my-argenta-result/my-argenta-result.html">
-<link rel="import" href="my-argenta-view/my-argenta-view.html">
-<link rel="import" href="my-argenta-scatter/my-argenta-scatter.html">
-<link rel="import" href="my-toolbar-login/my-toolbar-login.html">
+<link rel="import" href="custom/bounce-in-animation.html">
+<link rel="import" href="custom/donut-chart.html">
+<link rel="import" href="custom/paper-chip/paper-chip.html">
+<link rel="import" href="custom/range-slider.html">
+<link rel="import" href="custom/us-list-select.html">
+<link rel="import" href="custom/us-map-select.html">
 
+<link rel="import" href="dashboard-index.html">
 
+<link rel="import" href="app-programs.html">
+<link rel="import" href="app-programs-item.html">
+<link rel="import" href="my-app-item.html">
+<link rel="import" href="my-app-item-content.html">
+<link rel="import" href="my-app-list.html">
+<link rel="import" href="my-app-list-content.html">
+
+<link rel="import" href="data-auth.html">
+<link rel="import" href="app-buy.html">
+<link rel="import" href="app-settings.html">
+<link rel="import" href="view-footer.html">
+<link rel="import" href="view-header.html">
+<link rel="import" href="view-index.html">
+<link rel="import" href="view-main.html">
+<link rel="import" href="view-menu.html">
+<link rel="import" href="view-pages.html">
+
+<link rel="import" href="app-programs-item-area.html">
+<link rel="import" href="app-programs-item-qualifiers.html">
+<link rel="import" href="app-programs-item-terms.html">
+
+<link rel="import" href="app-approvals.html">
 
 <!-- Third-party elements -->
 
@@ -110,5 +152,5 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../../bower_components/paper-dialog-behavior/paper-dialog-behavior.html">
--->
+<!---->
 

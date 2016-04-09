@@ -1,0 +1,237 @@
+<!---->
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../../../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../../../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/classes/iron-flex-layout.html.html">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<!---->
+
+<!---- >
+http://jsbin.com/wexoyunilo/edit?html,output
+<!---->
+
+<dom-module id="login-buttons-horizontal">
+	
+	<!---- >
+	<style is="custom-style" include="iron-flex iron-flex-alignment"></style>
+	<!---->
+
+	<style>
+		:host {
+    }
+		/* button */
+		/* http://www.w3schools.com/css/css3_animations.asp */
+		@-webkit-keyframes slide-right { /* Chrome, Safari, Opera */
+			  0% { right: 200px; opacity: 0; -webkit-transform: rotateY( 90deg); }
+			100% { right:   0  ; opacity: 1; -webkit-transform: rotateY(  0deg); }
+		}
+		@keyframes slide-right { /* Standard syntax */
+			  0% { right: 200px; opacity: 0;         transform: rotateY( 90deg); }
+			100% { right:   0  ; opacity: 1;         transform: rotateY(  0deg); }
+		}
+		.button {
+			cursor: pointer;
+			/* animations */
+			position: relative;
+			-webkit-animation-name: slide-right; /* Chrome, Safari, Opera */
+			-webkit-animation-duration: .5s; /* Chrome, Safari, Opera */
+			animation-name: slide-right;
+			animation-duration: .5s;
+			animation-timing-function: ease-in; /* none linear ease ease-in ease-out ease-in-out */
+			animation-fill-mode: both;
+			animation-delay: 3s;
+		}
+		.one   { animation-delay: 1.24s; }
+		.two   { animation-delay: 1.20s; }
+		.three { animation-delay: 1.12s; }
+		.four  { animation-delay: 0.96s; }
+		.five  { animation-delay: 0.64s; }
+		/** /
+		.button:hover {
+		}
+		/**/
+		.stack-google {
+			color: #34a853; /** /Brand Colors #34a853 #4285f4 #fbbc05 #ea4335 /*http://brandcolors.net/*/
+		}
+		.google {
+			background: #34a853; /** /Brand Colors #34a853 #4285f4 #fbbc05 #ea4335 /*http://brandcolors.net/*/
+		}
+		.google:hover {
+			background: #24753a; /** /Brand Colors #34a853 #4285f4 #fbbc05 #ea4335 /*http://brandcolors.net/*/
+		}
+		.stack-facebook {
+			color: #3b5998; /** /Brand Colors #3b5998 /*http://brandcolors.net/*/
+		}
+		.facebook {
+			background: #3b5998; /** /Brand Colors #3b5998 /*http://brandcolors.net/*/
+		}
+		.facebook:hover {
+			background: #24355c; /** /Brand Colors #3b5998 /*http://brandcolors.net/*/
+		}
+		.stack-gmail {
+			color: #fbbc05; /** /Brand Colors #34a853 #4285f4 #fbbc05 #ea4335 /*http://brandcolors.net/*/
+		}
+		.gmail {
+			background: #fbbc05; /** /Brand Colors #34a853 #4285f4 #fbbc05 #ea4335 /*http://brandcolors.net/*/
+		}
+		.gmail:hover {
+			background: #977202; /** /Brand Colors #34a853 #4285f4 #fbbc05 #ea4335 /*http://brandcolors.net/*/
+		}
+		.stack-twitter {
+			color: #00aced; /** /Brand Colors #00aced /*http://brandcolors.net/*/
+		}
+		.twitter {
+			background: #00aced; /** /Brand Colors #00aced /*http://brandcolors.net/*/
+		}
+		.twitter:hover {
+			background: #005e80; /** /Brand Colors #00aced /*http://brandcolors.net/*/
+		}
+		.stack-google-plus {
+			color: #dc4e41; /** /Brand Colors #dd4b39 #dc4e41 /*http://brandcolors.net/*/
+		}
+		.google-plus {
+			background: #dc4e41; /** /Brand Colors #dd4b39 #dc4e41 /*http://brandcolors.net/*/
+		}
+		.google-plus:hover {
+			background: #812118; /** /Brand Colors #dd4b39 #dc4e41 /*http://brandcolors.net/*/
+		}
+	</style>
+	
+	<style>
+		.custom-icon {
+			font-size:45px;
+			/** /
+			background:#666;
+			background:rgba(0,0,0,0.4);
+			/**/
+			padding:30px;
+			-webkit-border-radius:1100%;
+			-moz-border-radius:100%;
+			-o-border-radius:100%;
+			border-radius:100%;
+			border:6px solid #fff;
+			color:#fff;
+			box-shadow: 0 1px 10px rgba(0, 0, 0, 0.46);
+			text-align:center;
+			display:table-cell;
+			vertical-align:middle;
+			width:60px;
+			height:60px;
+			-moz-transition:.5s;
+			-webkit-transition:.5s;
+			-o-transition:.5s;
+			transition:.5s;
+		}
+		/** /
+		.custom-icon:hover {
+			background:rgba(0,0,0,0.6);
+			background:rgba(0,0,0,0.4);
+		}
+		/**/
+		.fix-editor {
+			display:none;
+		}
+		.icon-wrapper {
+			display:inline-block;
+			/**/
+			margin: 0 15px 30px 15px;
+		}
+	</style>
+
+	
+	<template>
+		
+		<!---- >
+		<!---- >
+		<div class="layout horizontal row wrap center-justified flex-center-align">
+			<span class="fa-stack fa-3x button one" on-tap="login" data-provider="google">
+				<span class="fa fa-circle fa-stack-2x stack-google"></span>
+				<span class="fa fa-google fa-stack-1x fa-inverse"></span>
+				<paper-tooltip>Login with Google</paper-tooltip>
+			</span>
+			<span class="fa-stack fa-3x button two" on-tap="login" data-provider="facebook">
+				<span class="fa fa-circle fa-stack-2x stack-facebook"></span>
+				<span class="fa fa-facebook fa-stack-1x fa-inverse"></span>
+				<paper-tooltip>Login with Facebook</paper-tooltip>
+			</span>
+			<span class="fa-stack fa-3x button three" on-tap="login" data-provider="google">
+				<span class="fa fa-circle fa-stack-2x stack-gmail"></span>
+				<span class="fa fa-envelope fa-stack-1x fa-inverse"></span>
+				<paper-tooltip>Login with Gmail</paper-tooltip>
+			</span>
+			<span class="fa-stack fa-3x button four" on-tap="login" data-provider="twitter">
+				<span class="fa fa-circle fa-stack-2x stack-twitter"></span>
+				<span class="fa fa-twitter fa-stack-1x fa-inverse"></span>
+				<paper-tooltip>Login with Twitter</paper-tooltip>
+			</span>
+			<span class="fa-stack fa-3x button five" on-tap="login" data-provider="google">
+				<span class="fa fa-circle fa-stack-2x stack-google-plus"></span>
+				<span class="fa fa-google-plus fa-stack-1x fa-inverse"></span>
+				<paper-tooltip>Login with Google Plus</paper-tooltip>
+			</span>
+		</div>
+		<!---->
+		<!---- >
+		http://codepen.io/Onomicon/pen/iDfld
+		http://codepen.io/anon/pen/pyWyzd
+		<!---->
+		
+		<div class="layout horizontal row wrap center-justified flex-center-align">
+			<div class="icon-wrapper button one">
+				<span class="custom-icon fa fa-google google" on-tap="login" data-provider="google">
+					<span class="fix-editor">&nbsp;</span>
+					<paper-ripple></paper-ripple>
+					<paper-tooltip>login with Google</paper-tooltip>
+				</span>
+			</div>
+			<div class="icon-wrapper button two">
+				<span class="custom-icon fa fa-facebook facebook" on-tap="login" data-provider="facebook">
+					<span class="fix-editor">&nbsp;</span>
+					<paper-ripple></paper-ripple>
+					<paper-tooltip>login with Facebook</paper-tooltip>
+				</span>
+			</div>
+			<div class="icon-wrapper button three">
+				<span class="custom-icon fa fa-envelope gmail" on-tap="login" data-provider="google">
+					<span class="fix-editor">&nbsp;</span>
+					<paper-ripple></paper-ripple>
+					<paper-tooltip>login with Gmail</paper-tooltip>
+				</span>
+			</div>
+			<div class="icon-wrapper button four">
+				<span class="custom-icon fa fa-twitter twitter" on-tap="login" data-provider="twitter">
+					<span class="fix-editor">&nbsp;</span>
+					<paper-ripple></paper-ripple>
+					<paper-tooltip>login with Twitter</paper-tooltip>
+				</span>
+			</div>
+			<div class="icon-wrapper button five">
+				<span class="custom-icon fa fa-google-plus google-plus" on-tap="login" data-provider="google">
+					<span class="fix-editor">&nbsp;</span>
+					<paper-ripple></paper-ripple>
+					<paper-tooltip>login with Google Plus</paper-tooltip>
+				</span>
+			</div>
+		</div>
+  </template>
+
+  <script>
+    (function() {
+      //'use strict';
+      Polymer({
+        is: 'login-buttons-horizontal',
+				login: function(e) {
+					var provider = Polymer.dom(e).rootTarget.getAttribute('data-provider');
+					this.fire('login-buttons-horizontal', provider);
+					//console.log('provider', provider);
+				},
+      });
+    })();
+  </script>
+</dom-module>

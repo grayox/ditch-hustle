@@ -1,0 +1,170 @@
+<!---- >
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+<!---->
+
+<link rel="import" href="../font-roboto/roboto.html">
+
+<!-- Polymer Calatog Elements -->
+<link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<!---->
+
+<!-- Custom Imported Elements -->
+<link rel="import" href="custom/paper-chip/paper-chip.html">
+<link rel="import" href="../../bower_components/paper-fab-transitions/paper-fab-speed-dial.html"> <!-- https://github.com/GabiAxel/paper-fab-transitions -->
+<!---->
+
+<dom-module id="shared-styles">
+  <template>
+    <style>
+			/** /
+			Fade-in animation
+			http://codepen.io/bluehaus/pen/EfGyi
+			http://codepen.io/anon/pen/yOPVop
+			/**/
+			@-webkit-keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+			   @-moz-keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+			        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+			.fade-in {
+				opacity: 0;  /* make things invisible upon start */
+				-webkit-animation: fadeIn ease-in 1;  /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
+				   -moz-animation: fadeIn ease-in 1;
+				        animation: fadeIn ease-in 1;
+
+				-webkit-animation-fill-mode: forwards;  /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+				   -moz-animation-fill-mode: forwards;
+				        animation-fill-mode: forwards;
+
+				-webkit-animation-duration: 1s;
+				   -moz-animation-duration: 1s;
+				        animation-duration: 1s;
+			}
+			/** /
+			.fade-in.one {
+				-webkit-animation-delay: 0.7s;
+				-moz-animation-delay:    0.7s;
+				animation-delay:         0.7s;
+			}
+			.fade-in.two {
+				-webkit-animation-delay: 1.2s;
+				-moz-animation-delay:    1.2s;
+				animation-delay:         1.2s;
+			}
+			.fade-in.three {
+				-webkit-animation-delay: 1.6s;
+				-moz-animation-delay:    1.6s;
+				animation-delay:         1.6s;
+			}
+			/**/
+			paper-fab:hover {
+				/** /
+				The following is a monkey-patch to implement the material design spec found here:
+				https://www.google.com/design/spec/components/buttons.html#buttons-raised-buttons
+				    "Button Elevation. Raised buttons have a default elevation of 2dp.
+             On desktop, raised buttons can gain this elevation on hover."
+				Discussions are in the following locations:
+				Issue/Bug Report: https://github.com/PolymerElements/paper-fab/issues/35
+				https://github.com/PolymerElements/paper-material/pull/34
+				TODO: Change units to dp; Ensure values are spec compliant; Below is an estimate.
+				/**/
+				box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.3);
+			}
+			/**/
+			paper-fab-speed-dial {
+				/** /
+				http://gabiaxel.github.io/paper-fab-transitions/components/paper-fab-transitions/
+				The following paper-fab style breaks paper-fab-speed-dial
+				by preventing its expansion (unfolding display):
+					paper-fab {
+						position: fixed;
+						top: 128px;
+						right: 32px;
+					}
+				/**/
+				position: fixed;
+				z-index: 97;
+				top: 128px;
+				right: 32px;
+				/** /
+				bottom: 16px;
+				background: yellow;
+				-webkit-transform: translateZ(0);      
+				/**/
+			}
+			paper-fab.light-blue {
+        --paper-fab-background: var(--paper-light-blue-500);
+      }
+      paper-fab.green {
+        --paper-fab-background: var(--paper-green-500);
+      }
+			paper-fab.amber {
+        --paper-fab-background: var(--paper-amber-500);
+      }
+			/**/
+			paper-button .main {
+				background-color: var(--primary-color);
+			}
+			paper-card {
+				cursor: pointer;
+				max-width: 400px;
+				margin: 1em;
+				--paper-card-background-color: white;
+			}
+			iron-collapse {
+				cursor: default;
+			}
+			paper-chip {
+				/** /
+				http://bendavis78.github.io/paper-chip/paper-chip/index.html
+				/**/
+				cursor: pointer;
+				--paper-chip-icon-background-color: var(--accent-color);
+				/** /
+				--paper-chip-icon-background-color: var(--paper-pink-500, #E91E63);
+				/**/
+				margin: .25em;
+			}
+			paper-tooltip {
+				--paper-tooltip-text-color: var(--paper-yellow-500);
+				font-weight: bold;
+				/** /
+				font-size: xx-large;
+				/**/
+				position: relative;
+				z-index: 98;
+			}
+			/** /
+			paper-input {
+				width: 10em;
+				margin: 0 auto;
+			}
+			/**/
+			paper-toast {
+				/** /
+				--paper-toast-color: var(--paper-yellow-500);
+				font-weight: bold;
+				font-size: large;
+				/**/
+				position: fixed;
+				z-index: 99;
+			}
+			paper-dialog > div.buttons > paper-button.main {
+				/** /
+				background-color: var(--paper-light-blue-500);
+				/**/
+				background-color: var(--accent-color);
+				/**/
+				color: white;
+			}
+    </style>
+  </template>
+</dom-module>

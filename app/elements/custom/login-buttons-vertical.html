@@ -1,0 +1,163 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../../../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/classes/iron-flex-layout.html.html">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+<dom-module id="login-buttons-vertical">
+	
+	<style is="custom-style" include="iron-flex iron-flex-alignment"></style>
+	<style>
+		/**/    
+		:host {
+    }
+		.container {
+      margin: 1em auto;
+		}
+    paper-icon-item {
+			transition         : 1.25s;
+			-o-transition      : 1.25s;
+			-ms-transition     : 1.25s;
+			-moz-transition    : 1.25s;
+			-webkit-transition : 1.25s;	
+		}
+		paper-icon-item:hover
+		{
+			box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.3);
+			cursor: pointer;
+			border-radius: 5px;
+			background-color: var(--primary-color);
+			color: white;
+			transition         : 1.25s;
+			-o-transition      : 1.25s;
+			-ms-transition     : 1.25s;
+			-moz-transition    : 1.25s;
+			-webkit-transition : 1.25s;
+		}
+		div[role="listbox"] {
+			width: 18em;
+		}
+		/**/    
+	</style>
+	<style is="custom-style">
+		.flex-center-justified {
+			@apply(--layout-horizontal);
+			@apply(--layout-center-justified);
+		}
+	</style>
+	
+	<template>
+		
+		<div class="container flex-center-justified">
+		
+			<div role="listbox">
+				<paper-icon-item on-tap="login" data-provider="google">
+					<paper-ripple></paper-ripple>
+					<span item-icon class="fa fa-2x fa-fw fa-google"></span>
+					login with Google
+					<!---- >
+					<paper-item-body two-line>
+						<div secondary>login with</div>
+						<div>Google</div>
+					</paper-item-body>
+					<!---->
+				</paper-icon-item>
+				<paper-icon-item on-tap="login" data-provider="facebook">
+					<paper-ripple></paper-ripple>
+					<span item-icon class="fa fa-2x fa-fw fa-facebook-official"></span>
+					login with Facebook
+					<!---- >
+					<paper-item-body two-line>
+						<div secondary>login with</div>
+						<div>Facebook</div>
+					</paper-item-body>
+					<!---->
+				</paper-icon-item>
+				<paper-icon-item on-tap="login" data-provider="google">
+					<paper-ripple></paper-ripple>
+					<span item-icon class="fa fa-2x fa-fw fa-envelope"></span>
+					login with Gmail
+					<!---- >
+					<paper-item-body two-line>
+						<div secondary>login with</div>
+						<div>Gmail</div>
+					</paper-item-body>
+					<!---->
+				</paper-icon-item>
+				<paper-icon-item on-tap="login" data-provider="twitter">
+					<paper-ripple></paper-ripple>
+					<span item-icon class="fa fa-2x fa-fw fa-twitter"></span>
+					login with Twitter
+					<!---- >
+					<paper-item-body two-line>
+						<div secondary>login with</div>
+						<div>Twitter</div>
+					</paper-item-body>
+					<!---->
+				</paper-icon-item>
+				<paper-icon-item on-tap="login" data-provider="google">
+					<paper-ripple></paper-ripple>
+					<span item-icon class="fa fa-2x fa-fw fa-google-plus"></span>
+					login with Google Plus
+					<!---- >
+					<paper-item-body two-line>
+						<div secondary>login with</div>
+						<div>Google Plus</div>
+					</paper-item-body>
+					<!---->
+				</paper-icon-item>
+			</div>
+
+		</div>			
+			
+  </template>
+
+  <script>
+    (function() {
+      //'use strict';
+      Polymer({
+        is: 'login-buttons-vertical',
+				properties: {
+					app: {
+						type: Object,
+						notify: true,
+						reflectToAttribute: true,
+					},
+				},
+				/** /
+				listeners: {
+					'x-login': '_handleLogin',
+				},
+				/**/
+				_handleLogin: function(e) {
+					/** /
+					console.log('login');
+					this.set('app.auth', e.detail);
+					console.log('login', e.detail);
+					/**/
+				},
+				_handleLogout: function(e) {
+					/** /
+					console.log('login');
+					this.set('app.auth', e.detail);
+					console.log('login', e.detail);
+					/**/
+				},
+				/**/
+				login: function(e) {
+					var provider = Polymer.dom(e).rootTarget.getAttribute('data-provider');
+					this.fire('login-buttons-vertical', provider);
+					//console.log('provider', provider);
+				},
+				logout: function() {
+					this.$.auth.logout();
+				},
+      });
+    })();
+  </script>
+</dom-module>

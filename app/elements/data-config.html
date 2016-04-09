@@ -1,0 +1,160 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="data-config">
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+  <template>
+		<iron-ajax id="manifest" xauto verbose
+							 url="../manifest.json"
+							 handle-as="json"
+							 last-response={{manifest}}
+							 on-response="_handleResponseManifest"
+							 on-error="_handleErrorManifest"
+							 debounce-duration="300">
+		</iron-ajax>
+		<iron-ajax id="config" xauto verbose
+							 url="../config.json"
+							 handle-as="json"
+							 last-response={{config}}
+							 on-response="_handleResponseConfig"
+							 on-error="_handleErrorConfig"
+							 debounce-duration="300">
+		</iron-ajax>
+  </template>
+
+	<script>
+	(function() {
+		//'use strict';
+		Polymer({
+			is: 'data-config',
+			properties: {
+				app: {
+					type: Object,
+					notify: true,
+					reflectToAttribute: true,
+					value: function () {
+						return {};
+					}
+				}
+			},
+			attached: function() {
+				this.$.config.generateRequest();
+				this.$.manifest.generateRequest();
+			},
+			_handleErrorManifest: function() {
+				this.$.manifest.generateRequest();
+			},
+			_handleErrorConfig: function() {
+				this.$.config.generateRequest();
+			},
+			_handleResponseManifest: function() {
+				//console.log(this.app);
+				this.resetApp();
+			},
+			_handleResponseConfig: function() {
+				//console.log(this.app);
+				this.resetApp();
+			},
+			
+			resetApp: function() {
+				this.async(function() { // To access sibling elements per https://www.polymer-project.org/1.0/docs/devguide/registering-elements.html#initialization-order
+					if(typeof this.manifest !== 'object'){
+						return;
+					}
+					if(typeof this.config !== 'object'){
+						return;
+					}
+					this.set('app.meta'           , this.config                                                    );
+					this.set('app.meta.fbID'      , this._setBlanks(this.app.meta.fbID, 'app')                     );
+					this.set('app.meta.name'      , this.manifest.name                                             );
+					this.set('app.meta.shortName' , this.manifest.shortName                                        );
+					this.set('app.meta.desc'      , this.manifest.description                                      );
+					this.set('app.fb'             , {}                                                             );
+					this.set('app.fb.id'          , this.app.meta.fbID.app                                         );
+					this.set('app.fb.url'         , 'https://' + this.app.meta.fbID.app  + '.firebaseio.com'       );
+					this.set('app.fb.login'       , 'https://' + this.app.meta.fbID.auth + '.firebaseio.com'       );
+					try{
+						this.set('app.fb.user'      , [ this.app.fb.url  , 'users'    , this.app.auth.uid ].join('/'));
+					}catch(e){
+						this.set('app.fb.user'      , ''                                                             );
+					}
+					this.set('app.fb.settings'    , [ this.app.fb.user , 'settings'                     ].join('/'));
+					this.set('app.fb.programs'    , [ this.app.fb.user , 'programs'                     ].join('/'));
+					this.set('app.fb.siti'        , [ this.app.fb.url  , 'siti'                         ].join('/'));
+					/** /
+					this.set('app.fb.logs'        , [ this.app.fb.user , 'logs'                         ].join('/'));
+					this.set('app.fb.history'     , [ this.app.fb.user , 'history'                      ].join('/'));
+					/**/
+					//console.log(this.app);
+				});
+
+			},
+
+			_setBlanks: function(ob, str) { // Sets blank string properties of ob to value of ob[str]
+				var x, out = {};
+				for (x in ob) {
+					out[x] = ( typeof ob[x] === 'string' && !ob[x].length ) ? ob[str] : ob[x];
+				}
+				return out;
+			},
+			
+			/** /
+			_handleLogin: function() {
+				this.resetApp();
+				//this._logCentral('login'); // Report auth login event to central and local data stores
+				this.set('app.meta.signedIn', true);
+			},
+			/**/
+			
+			_handleLogout: function() {
+				//this._logCentral('logout'); // Report auth logout event to central and local data stores
+				//this.$.pages.$.history.$.fbc.disconnect();
+				this.ready();
+				this.attached();
+				//this.app.set('settings', {});
+				this.$.pages.$.settings.set('settings', {});
+				this.$.pages.$.history.set('fbItems', {});
+			}
+			
+			/*
+			_handleRequest: function() {
+				this.fire('my-data-request');
+			},
+			_handleResponse: function() {
+				this.response = this.$.ajax.lastResponse;
+				this.fire('my-data-response');
+				//console.log(this.response);
+			},
+			_computeUrlScript: function(id, key) {
+				var out = 'https://script.google.com/macros/s/';
+				out += id;
+				out += '/exec?k=';
+				out += key;
+				return out;
+			},
+			_computeAddyUrl: function(addy) {
+				//str = "https://script.google.com/macros/s/AKfycbyCEQRqkV_I5JEcrUeoHLM8giQqtiyzyS1kaYvHxmTB2AfT4TeJ/exec";
+				var out = this.scriptUrl;
+				out += '&m=';
+				out += encodeURIComponent(addy);
+				return out;
+			}
+			*/
+		});
+	})();
+	</script>
+</dom-module>

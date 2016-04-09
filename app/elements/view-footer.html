@@ -1,0 +1,57 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="view-footer">
+	
+	<style is="custom-style" include="app-theme iron-flex iron-flex-alignment"></style>
+	<style>
+		/**/    
+		:host {
+			display: block;
+			color: white;
+			padding: 3em;
+			background-color: var(--primary-color);
+    }
+    
+    p {
+      font-weight: 200;
+      margin-bottom: .5em;
+      text-align: center;
+    }
+    
+    p a {
+      color: inherit;
+    }
+		
+	</style>
+	
+	<template>
+					
+		<div clas>
+			<p>
+				Copyright (c) [[noticeYear]] [[noticeOwner]]. All rights reserved.
+			</p>
+		</div>		
+			
+  </template>
+
+  <script>
+    (function() {
+      //'use strict';
+      Polymer({
+        is: 'view-footer',
+				properties: {
+					noticeYear: {
+						type: String,
+						notify: true,
+						reflectToAttribute: true,
+					},
+					noticeOwner: {
+						type: String,
+						notify: true,
+						reflectToAttribute: true,
+					},
+				}
+      });
+    })();
+  </script>
+</dom-module>

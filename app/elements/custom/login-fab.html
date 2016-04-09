@@ -1,0 +1,149 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../../../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../../bower_components/paper-fab-transitions/paper-fab-speed-dial.html"> <!-- https://github.com/GabiAxel/paper-fab-transitions -->
+
+<link rel="import" href="custom/custom-logo.html">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+<dom-module id="login-fab">
+	
+	<style is="custom-style" include="iron-flex iron-flex-alignment"></style>
+	<style>
+		/**/    
+		:host {
+    }
+		paper-button.custom {
+			--paper-button-ink-color: var(--paper-pink-a200);
+			/** /
+			These could also be individually defined for each of the
+			specific css classes, but we'll just do it once as an example
+			/**/
+			--paper-button-flat-keyboard-focus: {
+				background-color: var(--paper-pink-a200);
+				color: white !important;
+			};
+			--paper-button-raised-keyboard-focus: {
+				background-color: var(--paper-pink-a200) !important;
+				color: white !important;
+			};
+		}
+		paper-button.custom:hover {
+			background-color: var(--paper-indigo-100);
+		}
+		paper-button.pink {
+			color: var(--paper-pink-a200);
+
+		}
+		paper-button.indigo {
+			background-color: var(--primary-color);
+			/** /
+			background-color: var(--paper-indigo-500);
+			/**/
+			color: white;
+			--paper-button-raised-keyboard-focus: {
+				background-color: var(--paper-pink-a200) !important;
+				color: white !important;
+			};
+		}
+		paper-button.green {
+			background-color: var(--paper-green-500);
+			color: white;
+		}
+		paper-button.green[active] {
+			background-color: var(--paper-red-500);
+		}
+		paper-button.disabled {
+			color: white;
+		}
+		template [is=dom-repeat] {
+							transition : .5s ;
+					 -o-transition : .5s ;
+					-ms-transition : .5s ;
+				 -moz-transition : .5s ;
+			-webkit-transition : .5s ;
+		}
+	</style>
+	
+	<template>
+		
+		<paper-fab-speed-dial direction="left"
+													xoffset="66"
+													xopenAnimationConfig='[ { "name": "fade-in-animation",
+																								    "timing": {
+																								      "delay": 150,
+																								      "duration": 250
+																								    }
+																								  },
+																								  { "name": "paper-square-grow-animation",
+																								    "startSize": 56,
+																										"timing": {
+																											"delay": 150,
+																											"duration": 1000
+																										}
+																								  }
+																								]'>
+			<paper-fab class="dropdown-trigger"
+								 icon="more-horiz"
+								 xicon="open-with">
+			</paper-fab>
+			<div class="dropdown-content">
+				<paper-fab mini xicon="unfold-more" class="light-blue" on-tap="login" data-arg="google"  ><span class="fa fa-2x fa-fw fa-google"></span></paper-fab>
+				<paper-fab mini xicon="unfold-less" class="green"      on-tap="login" data-arg="facebook"><span class="fa fa-2x fa-fw fa-facebook-official"></span></paper-fab>
+				<paper-fab mini xicon="unfold-more" class="light-blue" on-tap="login" data-arg="google"  ><span class="fa fa-2x fa-fw fa-envelope"></span></paper-fab>
+				<paper-fab mini xicon="swap-vert"   class="amber"      on-tap="login" data-arg="twitter" ><span class="fa fa-2x fa-fw fa-twitter"></span></paper-fab>
+				<paper-fab mini xicon="unfold-more" class="light-blue" on-tap="login" data-arg="google"  ><span class="fa fa-2x fa-fw fa-google-plus"></span></paper-fab>
+			</div>
+		</paper-fab-speed-dial>
+  </template>
+
+  <script>
+    (function() {
+      //'use strict';
+      Polymer({
+        is: 'login-fab',
+				properties: {
+					app: {
+						type: Object,
+						notify: true,
+						reflectToAttribute: true,
+					},
+				},
+				/** /
+				listeners: {
+					'x-login': '_handleLogin',
+				},
+				/**/
+				_handleLogin: function(e) {
+					/** /
+					console.log('login');
+					this.set('app.auth', e.detail);
+					console.log('login', e.detail);
+					/**/
+				},
+				_handleLogout: function(e) {
+					/** /
+					console.log('login');
+					this.set('app.auth', e.detail);
+					console.log('login', e.detail);
+					/**/
+				},
+				/**/
+				login: function(e) {
+					var s = Polymer.dom(e).rootTarget.getAttribute('data-provider');
+					this.$.auth.login(s);
+					//console.log('app', this.app);
+				},
+				logout: function() {
+					this.$.auth.logout();
+				},
+      });
+    })();
+  </script>
+</dom-module>

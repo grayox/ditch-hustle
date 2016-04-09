@@ -1,0 +1,88 @@
+<!---- >
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+<!---->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="view-landing.html">
+<link rel="import" href="view-main.html">
+<link rel="import" href="data-config.html">
+
+<dom-module id="view-index">	
+	
+	<template>
+		
+		<style></style>
+		
+		<data-auth hidden
+							 redirect
+							 id="auth"
+							 u="{{app.auth}}"
+							 app="{{app}}">
+		</data-auth>
+		
+		<paper-button on-tap="show">Show</paper-button>
+		<paper-button on-tap="_onLogoutButton">Logout</paper-button>
+		<!---->
+		<template is="dom-if" if="![[app.auth]]">
+			<view-landing app="[[app]]"></view-landing>
+    </template>	
+		<!---->
+		<template is="dom-if" if="[[app.auth]]">
+			<view-main app="{{app}}"></view-main>
+    </template>
+		<!---- >
+		<view-main app="{{app}}"></view-main>
+		<!---- >
+		<view-landing hidden$="{{_isLogin}}"  app="{{app}}"></view-landing>
+		<view-main    hidden$="{{!_isLogin}}" app="{{app}}"></view-main>
+		<!---->
+
+	</template>
+
+	<!---->
+	<script>
+		(function(){
+      //'use strict';
+			Polymer({
+				is: 'view-index',
+				properties: {
+					app: {
+						type: Object,
+						notify: true,
+						reflectToAttribute: true,
+					},
+				},
+				listeners: {
+					'login-buttons-horizontal' : '_onLoginButton'  ,
+					/** /
+					'login-button-menu'        : '_onLoginButton'  ,
+					'login-buttons-vertical'   : '_onLoginButton'  ,
+					'login-fab'                : '_onLoginButton'  ,
+					/**/
+					'logout-button'            : '_onLogoutButton' ,
+				},
+				_onLoginButton: function(e) {
+					//console.log('e', e);
+					this.$.auth.login(e.detail);
+				},
+				_onLogoutButton: function() {
+					this.$.auth.logout();
+				},
+				show: function() {
+					console.log('app', this.app);
+				},
+				
+			});
+		})();
+	</script>
+	<!---->	
+	
+</dom-module>
+
+

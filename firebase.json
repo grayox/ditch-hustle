@@ -1,0 +1,11 @@
+{
+  "public": "dist",
+  "firebase": "radiant-heat-5197",
+  "rules": "app/security-rules.json",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**",
+		"app/browsers/**"
+  ]
+}

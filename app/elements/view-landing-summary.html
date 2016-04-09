@@ -1,0 +1,167 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+<dom-module id="view-landing-summary">
+	
+	<style is="custom-style" include="iron-flex iron-flex-alignment"></style>
+	<style>
+		/**/    
+		:host {
+			display: block;
+			min-height: 100vh;
+			width: 100vw;
+			background-color: white;
+			-webkit-transition: all .8s ease-in-out;
+			-moz-transition: all .8s ease-in-out;
+			-o-transition: all .8s ease-in-out;
+			transition: all .8s ease-in-out;
+    }
+		p {
+			/**/
+			vertical-align: top;
+			/**/
+		}
+		.top {
+			min-height: 50vh;
+			font-size: 1.5em;
+			color: white;
+			background-image: url('../images/landing/header-bg-blur.jpg');
+			/** /
+			align-self: flex-end;
+			vertical-align: bottom;
+			opacity: .67;
+			/**/
+		}
+		.top div {
+			font-style: italic;
+			margin-top: 18vh;
+		}
+		.bottom {
+			padding: 2em;		
+		}
+		.bottom iron-grid div {
+			margin-top: 2em;
+		}
+		.bottom iron-grid div p {
+			margin-top: -1em;
+		}
+		.color {
+			color: var(--paper-amber-500);
+			font-weight: bold;
+		}
+		h3 {
+			font-size: 2.25em;
+		}
+		.fa {
+			margin-right: .75em;
+		}
+		.flexchild {
+      @apply(--layout-flex);
+			@apply(--layout-vertical);
+      @apply(--layout-center-justified);
+    }
+		.flex-center-justified {
+			@apply(--layout-horizontal);
+			@apply(--layout-center-justified);
+		}
+	</style>
+	
+	<template>
+		
+		<div class="top">
+			<!---- >
+			<div class="flex-center-justified">
+				<paper-icon-button icon="expand-less"
+													 on-click="_onClickUp">
+				</paper-icon-button>
+			</div>
+			<!---->
+			<iron-grid>
+				<div class="xs10 offset-xs1 s10 offset-s1 m9 offset-m2 l9 offset-l2">
+					<!---- >
+					<span class="fa fa-2x fa-pull-left fa-magic"></span>
+					<!---->
+					Grow your &nbsp; <span class="color">hard money</span> &nbsp;
+					business using the world&rsquo;s &nbsp;
+					<span class="color">leading technology.</span>
+				</div>
+			</iron-grid>
+		</div>
+		
+		<div class="bottom flexchild">
+			<iron-grid>
+				<div class="xs12 s12 m6 l3">
+					<h3>
+						<span class="fa xfa-lg xfa-5x fa-pull-left fa-rocket"></span>
+						Originate
+					</h3>
+					<p>
+						Compete to originate hard money to thousands of investors
+						bidding on tens-of-thousands of auction properties every day.
+					</p>
+				</div>
+				<div class="xs12 s12 m6 l3">
+					<h3>
+						<span class="fa xfa-lg xfa-5x fa-pull-left fa-tint"></span>
+						Sell
+					</h3>
+					<p>
+						Increase portfolio liquidity by selling your paper to the highest bidder.
+						Then recruit new capital to grow your business.
+					</p>
+				</div>
+				<div class="xs12 s12 m6 l3">
+					<h3>
+						<span class="fa xfa-lg xfa-5x fa-pull-left fa-shopping-basket"></span>
+						Buy
+					</h3>
+					<p>
+						Shop whenever you need to deploy capital.
+						Buy paper from your peers in the network.
+					</p>
+				</div>
+				<div class="xs12 s12 m6 l3">
+					<h3>
+						<span class="fa xfa-lg xfa-5x fa-pull-left fa-line-chart"></span>
+						Grow
+					</h3>
+					<p>
+						Connect to institutional investors for new capital.
+						Manage it using our buy and sell services.
+					</p>
+				</div>
+			</iron-grid>
+			<!---- >
+			<div class="flex-center-justified">
+				<paper-icon-button icon="expand-more"
+													 on-click="_onClickDown">
+				</paper-icon-button>
+			</div>
+			<!---->
+		</div>
+			
+  </template>
+
+  <script>
+    (function() {
+      //'use strict';
+      Polymer({
+        is: 'view-landing-summary',
+				properties: {
+					app: {
+						type: Object,
+						notify: true,
+						reflectToAttribute: true,
+					},
+				},
+				_onClickUp: function() {
+					this.fire('nav-up');
+				},
+				_onClickDown: function() {
+					this.fire('nav-down');
+				},
+      });
+    })();
+  </script>
+</dom-module>
