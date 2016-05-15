@@ -61,14 +61,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				<paper-toolbar id="drawerToolbar" class="paper-font-title container flex-center-justified">
 					<custom-logo></custom-logo>
 					<!---- >
-					<img id="icon" src="../../images/touch/icon-128.png" height="50" title="[[app.meta.desc]]">
-					<paper-tooltip for="icon"><span>[[app.desc]]</span></paper-tooltip>
+					<img id="icon" src="../../images/touch/icon-128.png" height="50" title="[[app.meta.tag]]">
+					<paper-tooltip for="icon"><span>[[app.meta.tag]]</span></paper-tooltip>
 					<!---->
 				</paper-toolbar>
 				<div>
-					<!---- >
-					<paper-button on-tap="_printState">Print State</paper-button>
-					<!---->
 					<view-header app=[[app]]></view-header>
 					<view-menu route="{{route}}" on-select-item="_onMenuSelect"></view-menu><!--Var-->
 				</div>
@@ -78,8 +75,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					<paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
 					<div class="xmiddle paper-font-display1 app-name">[[app.meta.shortName]]</div>
 					<span class="flex"></span>
-					<!---->		
+					<!---- >		
 					<login-button-menu></login-button-menu>
+					<!---->		
 					<logout-button></logout-button>
 					<!---->
 				</paper-toolbar>

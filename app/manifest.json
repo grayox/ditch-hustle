@@ -1,10 +1,10 @@
 {
-	"version_number": 2.0,
-	"version_description": "The previous version uses the nav + list + detail template here: https://github.com/PolymerElements/app-layout-templates; We are switching to the standard PSK because the detail section will be handled by an item extension per the iron-list collapse demo here https://github.com/PolymerElements/iron-list/blob/master/demo/collapse.html; the second pane will be handled per the iron-list selection demo here https://github.com/PolymerElements/iron-list/blob/master/demo/selection.html",
+	"version_number": 0.1,
+	"version_description": "",
   "shortName": "LoanZone",
-  "short_name": "LoanZone",
-  "name": "LoanZone",
-  "description": "Less hassle. More deals.",
+  "name": "Loan Zone",
+  "tag": "Less hassle. More deals.",
+  "description": "Auction lending specialists",
 	"icons": {
 		"16": "icon-16.png",
 		"128": "icon-128.png"

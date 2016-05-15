@@ -13,7 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <head>
 	<meta charset="utf-8">
-  <meta name="description" content="Find the best movies near you playing today"><!-- Var -->
+  <meta name="description" content="Auction lending specialists"><!-- Var -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- Reference: https://www.polymer-project.org/0.5/articles/webview.html#oneapp
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0">
@@ -63,11 +63,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!---- >
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js" async></script><!-- Causes error for vulcanize -- >
   <!---->
-  <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script><!--Causes error; use no .. version above-->
+  <script src="../bower_components/webcomponentsjs/webcomponents-lite.js" async></script><!--Causes error; use no .. version above-->
   <!-- endbuild -->
 
   <!-- will be replaced with elements/elements.vulcanized.html -->
-  <link rel="import" href="elements/elements.html" xasync>
+  <link rel="import" href="elements/elements.html" xasync><!-- async breaks renderer -->
   <!-- endreplace-->
 	
   <!-- Fonts -->
@@ -116,7 +116,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		</platinum-sw-register>
 
   </template>
-  <script src="scripts/app.js"></script>
+  <script src="scripts/app.js" async></script>
 </body>
 
 </html>

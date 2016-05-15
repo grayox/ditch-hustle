@@ -115,17 +115,18 @@ https://github.com/vaadin/expense-manager-demo/blob/master/client/app/elements/l
 			
 		</neon-animated-pages>
 		<!---- >
-		<!---->
 		<div class="progress flex layout vertical flex-center-justified flex-center-align"
 				 hidden$="[[_hideProgress]]">
 			<p>Loading</p>
 			<paper-progress indeterminate></paper-progress>
 		</div>
+		<paper-button on-tap="_show">Show</paper-button>
+		<!---->
 		<div hidden$="[[app.auth]]" class="fade-in">
 			<div class="header">
 				<view-landing-header id="top"
-														 header-title="Loan Zone"
-														 header-tag="Less hassle. More deals.">
+														 header-title="[[app.meta.name]]"
+														 header-tag="[[app.meta.tag]]">
 				</view-landing-header>
 				<view-landing-login class="flexchild"
 														app="{{app}}">
@@ -160,8 +161,11 @@ https://github.com/vaadin/expense-manager-demo/blob/master/client/app/elements/l
 					/**/
 					_hideProgress: {
 						type: Boolean,
-						computed: '_computeHideProgress(app)',
+						computed: '_computeHideProgress(app.auth)',
 					},
+				},
+				attached: function() {
+					this.set('app.auth', false);
 				},
 				listeners: {
 					'login-buttons-horizontal' : '_onLogin'        ,
@@ -177,8 +181,8 @@ https://github.com/vaadin/expense-manager-demo/blob/master/client/app/elements/l
 					'nav-down'                 : '_onNavDown'      ,
 					/**/
 				},
-				_computeHideProgress: function() {
-					return !( (this.app && this.app.auth) && (typeof this.app.auth === 'Boolean') );
+				_computeHideProgress: function(ob) {
+					return !( ob === false );
 				},
 				_onLogin: function() {
 					this.set('app.auth', true);
@@ -197,6 +201,7 @@ https://github.com/vaadin/expense-manager-demo/blob/master/client/app/elements/l
 					this.set('exitAnimation'  , 'slide-up-animation'         );
 					this.set('_selected'      ,  this._selected + 1          );
 				},
+				/**/
 				_show: function() {
 					//this.set('app.auth', true);
 					console.log('app', this.app);

@@ -25,13 +25,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 							 u="{{app.auth}}"
 							 app="{{app}}">
 		</data-auth>
-		
-		<paper-button on-tap="show">Show</paper-button>
-		<paper-button on-tap="_onLogoutButton">Logout</paper-button>
+
 		<!---->
 		<template is="dom-if" if="![[app.auth]]">
 			<view-landing app="[[app]]"></view-landing>
-    </template>	
+    </template>
 		<!---->
 		<template is="dom-if" if="[[app.auth]]">
 			<view-main app="{{app}}"></view-main>
@@ -73,9 +71,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				},
 				_onLogoutButton: function() {
 					this.$.auth.logout();
-				},
-				show: function() {
-					console.log('app', this.app);
 				},
 				
 			});

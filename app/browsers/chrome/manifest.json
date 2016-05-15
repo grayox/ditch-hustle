@@ -1,13 +1,13 @@
 { // https://developer.chrome.com/home/multi-device-pillar
 	// Allows build for Chrome Apps
-	"name": "Argenta",
-	"description": "Automatic value estimates of residential real estate",
+	"name": "LoanZone",
+	"description": "Auction lending specialists",
 	"version": "0.1",
-	"manifest_version": 2,
+	"manifest_version": 1,
 	"app": {
 		/*
     "urls": [
-      "*://www.blazing-torch-612.firebaseapp.com/",
+      "*://radiant-heat-5197.firebaseapp.com/",
       "*://www.google.com/mail/",
       "*://www.facebook.com/mail/"
     ],
