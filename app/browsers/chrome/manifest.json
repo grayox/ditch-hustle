@@ -1,13 +1,13 @@
 { // https://developer.chrome.com/home/multi-device-pillar
 	// Allows build for Chrome Apps
-	"name": "LoanZone",
-	"description": "Auction lending specialists",
+	"name": "Mojo",
+	"description": "Turn credit turndowns into sales.",
 	"version": "0.1",
 	"manifest_version": 1,
 	"app": {
 		/*
     "urls": [
-      "*://radiant-heat-5197.firebaseapp.com/",
+      "*://torrid-inferno-5921.firebaseapp.com/",
       "*://www.google.com/mail/",
       "*://www.facebook.com/mail/"
     ],

@@ -1,10 +1,10 @@
 {
 	"version_number": 0.1,
 	"version_description": "",
-  "shortName": "LoanZone",
-  "name": "Loan Zone",
-  "tag": "Less hassle. More deals.",
-  "description": "Auction lending specialists",
+  "shortName": "Mojo",
+  "name": "Mojo",
+  "tag": "Credit. Solved.",
+  "description": "Turn credit turndowns into sales.",
 	"icons": {
 		"16": "icon-16.png",
 		"128": "icon-128.png"

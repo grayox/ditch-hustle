@@ -1,6 +1,6 @@
 {
   "public": "dist",
-  "firebase": "radiant-heat-5197",
+  "firebase": "torrid-inferno-5921",
   "rules": "app/security-rules.json",
   "ignore": [
     "firebase.json",
