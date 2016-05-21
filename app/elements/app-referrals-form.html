@@ -1,0 +1,108 @@
+<!---- >
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+<!---->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/app-layout/app-layout.html">
+<!---- >
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<!---->
+
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/paper-badge/paper-badge.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+
+<link rel="import" href="my-app-list.html">
+<link rel="import" href="my-app-list-content.html">
+
+<dom-module id="app-referrals-form">
+
+	<template>
+		<!---->
+		<style include="shared-styles"></style>
+		<!---->
+		<style>
+			:host {
+				margin: 1em;
+			}
+			paper-input {
+				margin: 0 1.5em;
+			}
+			/**/
+			paper-input:last-of-type {
+    		margin-bottom: .7em;
+			}
+			/**/
+			.buttons {
+				@apply(--layout-horizontal);
+			}
+			paper-button {
+				margin-bottom: 1em;
+				color: var(--paper-grey-500);
+				--paper-button: {
+					@apply(--layout-horizontal);
+					/**/
+					@apply(--layout-center-center);
+					/**/
+				};
+        /** /
+				color: white;
+				height: 100%;
+				border-radius: 0;      
+				border-left: 1px solid var(--paper-grey-600, #757575);
+				margin: 0;
+        /**/
+			}
+			paper-button.primary {
+				color: white;
+				background-color: var(--accent-color, --paper-light-blue-500);
+			}
+		</style>
+
+		<!---->
+		<paper-card>
+			<paper-input label="Name"  value="{{new.name}}" ></paper-input>
+			<paper-input label="Zip"   value="{{new.zip}}"  ></paper-input>
+			<paper-input label="Email" value="{{new.email}}"></paper-input>
+			<paper-input label="Phone" value="{{new.phone}}"></paper-input>
+			<div class="buttons">
+				<paper-button on-tap="reset">Reset</paper-button>
+				<paper-button on-tap="reset" class="primary" raised>
+					Send&nbsp;
+					<iron-icon icon="send"></iron-icon>
+				</paper-button>
+			</div>
+		</paper-card>
+		<!---->
+	</template>
+
+
+  <script>
+		(function(){
+			Polymer({
+				is: 'app-referrals-form',
+				properties: {
+				},
+				reset: function() {
+					this.set('new', {});
+				}
+			});
+		})();
+  </script>
+
+</dom-module>

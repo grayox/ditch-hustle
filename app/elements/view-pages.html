@@ -21,7 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="dashboard-index.html">
 <link rel="import" href="app-settings.html">
 <link rel="import" href="app-programs.html">
-<link rel="import" href="app-approvals.html">
+<link rel="import" href="app-referrals.html">
 <link rel="import" href="app-buy.html">
 <link rel="import" href="app-sell.html">
 <link rel="import" href="app-settlements.html">
@@ -40,13 +40,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	<template>
 		
 		<iron-pages attr-for-selected="data-route" selected="{{route}}">										          
-			<section data-route="page01"><dashboard-index app={{app}} id="dashboard"  ></dashboard-index></section>
+			<section data-route="page01"><app-referrals   app={{app}} id="referrals"  ></app-referrals  ></section>
 			<section data-route="page02"><app-settings    app={{app}} id="settings"   ></app-settings   ></section>
+			<!---- >
+			<section data-route="page01"><dashboard-index app={{app}} id="dashboard"  ></dashboard-index></section>
 			<section data-route="page03"><app-programs    app={{app}} id="programs"   ></app-programs   ></section>
 			<section data-route="page04"><app-approvals   app={{app}} id="approvals"  ></app-approvals  ></section>
 			<section data-route="page05"><app-buy         app={{app}} id="buy"        ></app-buy        ></section>
 			<section data-route="page06"><app-sell        app={{app}} id="sell"       ></app-sell       ></section>
 			<section data-route="page07"><app-settlements app={{app}} id="settlements"></app-settlements></section>
+			<!---->
 		</iron-pages>
 	
 	</template>

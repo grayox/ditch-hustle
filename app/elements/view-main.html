@@ -26,6 +26,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="app-programs.html">
 <link rel="import" href="my-app-item.html">
 <link rel="import" href="data-auth.html">
+<link rel="import" href="app-referrals-form.html">
 <link rel="import" href="app-settings.html">
 <link rel="import" href="view-header.html">
 <link rel="import" href="view-menu.html">
@@ -68,6 +69,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				<div>
 					<view-header app=[[app]]></view-header>
 					<view-menu route="{{route}}" on-select-item="_onMenuSelect"></view-menu><!--Var-->
+					<!---->
+					<app-referrals-form></app-referrals-form>
+					<!---->
 				</div>
 			</paper-header-panel>
 			<paper-header-panel main class="flex" mode="standard" xmode="seamed standard waterfall waterfall-tall scroll cover">

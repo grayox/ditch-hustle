@@ -1,0 +1,333 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="app-referrals-form.html">
+<link rel="import" href="app-referrals-list.html">
+
+<dom-module id="app-referrals">
+
+	<template>
+		
+		<style>
+			:host {
+				@apply(--layout-fit);
+				@apply(--layout-vertical);
+				@apply(--paper-font-common-base);
+				display: block;
+				font-family: sans-serif;
+			}
+			paper-tooltip {
+				--paper-tooltip-text-color: var(--paper-yellow-500);
+				font-weight: bold;
+			}
+			.toolbar {
+				background: var(--accent-color, --paper-pink-500);
+				box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
+				z-index: 1;
+				--paper-toolbar-title: {
+					/** /
+					font-size: 16px;
+					font-size: 16px;
+					font-weight: bold;
+					line-height: 1em;
+					font-size: 1em;
+					/**/
+					font-size: xx-small;
+					margin-left: 0;
+				};
+			}
+			.toolbar paper-icon-button {
+				--paper-icon-button-ink-color: white;
+			}
+			#itemsList,
+			#selectedItemsList {
+				@apply(--layout-flex);
+			}
+			.item {
+				@apply(--layout-horizontal);
+				cursor: pointer;
+				padding: 16px 22px;
+				border-bottom: 1px solid #DDD;
+			}
+			.item:hover {
+				background-color: var(--google-grey-100);
+			}
+			.item:focus,
+			.item.selected:focus {
+				outline: 0;
+			}
+			.item.selected .star {
+				color: var(--paper-blue-600);
+			}
+			.item.selected {
+				background-color: var(--google-grey-100);
+			}
+			.avatar {
+				height: 40px;
+				width: 40px;
+				border-radius: 20px;
+				box-sizing: border-box;
+				background-color: #DDD;
+			}
+			paper-badge {
+				-webkit-transition: all 0.1s;
+				transition: all 0.1s;
+				opacity: 1;
+				margin-top: 5px;
+			}
+			paper-badge[label="0"] {
+				opacity: 0;
+			}
+			#starredView {
+				/** /
+				width: 50%;
+				width: 200px;
+				/**/
+				width: calc(100% - 300px);
+				border-left: 1px solid #ddd;
+				@apply(--layout-vertical);
+			}
+			/** /
+			#itemsList {
+				width: 50%;
+				width: 300px;
+				border-right: 1px solid #ddd;
+			}
+			/**/
+			paper-item {
+				white-space: nowrap;
+				cursor: pointer;
+				position: relative;
+			}
+			paper-item:focus {
+				outline: 0;
+				background-color: #ddd;
+			}
+			paper-item:hover::after {
+				content: "－";
+				width: 16px;
+				height: 16px;
+				display: block;
+				border-radius: 50% 50%;
+				background-color: var(--google-red-300);
+				margin-left: 10px;
+				line-height: 16px;
+				text-align: center;
+				color: white;
+				font-weight: bold;
+				text-decoration: none;
+				position: absolute;
+				right: 15px;
+				top: calc(50% - 8px);
+			}
+			.noSelection {
+				color: #999;
+				margin-left: 10px;
+				line-height: 50px;
+			}
+			.two-columns {
+				@apply(--layout-flex);
+				@apply(--layout-horizontal);
+				overflow: hidden;
+			}
+			paper-item, paper-toolbar {
+				transition         : .25s;
+				-o-transition      : .25s;
+				-ms-transition     : .25s;
+				-moz-transition    : .25s;
+				-webkit-transition : .25s;
+			}
+
+		</style>
+		
+		<!---- >
+		<iron-localstorage name="movies"
+                       xon-iron-localstorage-load="_backupLoaded"
+                       value="{{items}}">
+    </iron-localstorage>
+		<!---- >
+		<iron-localstorage name="locationString"
+                       xon-iron-localstorage-load="_backupLoaded"
+                       value="{{locationString}}">
+    </iron-localstorage>
+		<!---->
+		<paper-toolbar class="toolbar" on-tap="_showItems">
+			<div>
+				<paper-icon-button id="star"
+													 icon="star"
+													 alt="Starred"
+													 on-tap="_clearSelection">
+				</paper-icon-button>
+				<paper-badge label$="[[selectedItems.length]]" for="star"></paper-badge>
+				<paper-tooltip for="star" position="right">Clear selections</paper-tooltip>
+			</div>
+			<div class="title">
+				<div>[[todaysDate]]</div>
+				<div>[[locationString]]</div>
+				<!---- >
+				<!---->
+			</div>
+			<div>
+				<paper-icon-button id="swap-horiz"
+													 icon="swap-horiz"
+													 alt="Starred"
+													 on-tap="_toggleView">
+				</paper-icon-button>
+				<paper-tooltip for="swap-horiz" position="left">Toggle view</paper-tooltip>
+			</div>
+		</paper-toolbar>
+		<!---- >
+		<app-referrals-form></app-referrals-form>
+		<!---->
+		<div class="two-columns">
+			<!-- Main list -->
+			<my-app-list app="[[app]]"
+									 hidden$="[[!showSelection]]"
+									 id="itemsList"
+									 items="[[items]]"
+									 selected-items="{{selectedItems}}">
+			</my-app-list>
+			<!---->
+			<div id="starredView">
+				<template is="dom-if" if="[[!selectedItems.length]]">
+					<div class="noSelection">Click movies for showtimes</div>
+				</template>
+				<!-- List for selected items -->
+				<iron-list id="selectedItemsList"
+									 style="height:300px"
+									 items="[[selectedItems]]"
+									 hidden$="[[!selectedItems.length]]"
+									 selection-enabled>
+					<template>
+						<paper-item on-tap="_deselect" tabindex="0">[[item.title]]</paper-item>
+					</template>
+				</iron-list>
+				<my-app-list-content id="selectedItemsListContent"
+														 hidden$="[[!selectedItems.length]]"
+														 items="[[selectedItemsList]]"
+														 xselected-items="{{selectedItems}}"
+														 selection-enabled>
+				</my-app-list-content>
+				<!---->
+			</div>
+		</div>
+		<!---->
+	</template>
+
+
+  <script>
+		(function(){
+			Polymer({
+				is: 'app-referrals',
+				/**/
+				listeners: {
+					'location-changed' : '_onLocationChanged',
+				},
+				/**/
+				properties: {
+					app: {
+						type: Object,
+						notify: true,
+						reflectToAttribute: true,
+					},
+          items: {
+						type: Array,
+						notify: true
+					},
+          selectedItems: {
+            type: Array,
+						notify: true
+          },
+          showSelection: {
+            type: Boolean,
+            value: true,
+            observer: '_showSelectionChanged'
+          },
+					/** /
+					selectedItemsList: {
+						type: Array,
+						notify: true
+						computed: '_computeSelectedItemsList(selectedItems.*)'
+					},
+					/**/
+					todaysDate: {
+						type: String,
+						value: function() {
+							var d = new Date();
+							return d.toDateString();
+						}
+					}
+				},
+				/**/
+				_showItems: function() {
+					console.log(this.app);
+					//console.log(this.selectedItemsList);
+				},
+				/**/
+				_onLocationChanged: function(e) {
+					/** /
+					console.log(e);
+					/**/
+					var out = '', r = e.detail, ar = [];
+					if(r.cityState){ out += r.cityState; }
+					else{
+						if(r.city )    { ar[0] = r.city ; }
+						if(r.state)    { ar[1] = r.state; }
+						out += ar.join(', ');
+					}
+					if(r.zip5){ out += ' ' + r.zip5; }
+					this.set( 'locationString', out );
+				},
+				/** /
+				_computeSelectedItemsList: function(record) {
+					var ar = record.base, out = [], 
+					r, j, i = ar.length;
+					while(i--){
+						r = ar[i].movieTimes;
+						j = r.length;
+						while(j--) {
+							out.push({
+								movie      : ar[i].title,
+								score      : ar[i].score,
+								scoreRound : ar[i].scoreRound,
+								qCode      : ar[i].qCode,
+								time       :  r[j].displayTime,
+								theater    :  r[j].theaterName,
+								addy       :  r[j].theaterAddyString,
+								milTime    :  r[j].milTime,
+								codeTime   :  r[j].codeTime
+							});
+						}
+					}
+					return out.sort(function(a, b){return a.milTime - b.milTime;});
+				},
+				/**/
+				_clearSelection: function() {
+					this.$.itemsList.$.list.clearSelection();
+				},
+				// Original demo code below this line
+        _deselect: function(e) {
+          this.$.itemsList.$.list.deselectItem(e.model.item);
+        },
+        _toggleView: function() {
+          this.showSelection = !this.showSelection;
+        },
+        _showSelectionChanged: function() {
+          this.$.selectedItemsList.fire('resize');
+        }
+				// End Original Demo Code
+				/**/
+			});
+		})();
+  </script>
+
+</dom-module>
